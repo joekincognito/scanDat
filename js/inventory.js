@@ -1,4 +1,6 @@
-var db;
+var order = {};
+order = <?php echo json_encode($order).';';?>
+var inv_center = $('option:selected').prop('id');
 var gQTY; //global scoped qty
 var oh; //global scoped onHand qty field
 var gqmin; //global scoped min quantity
@@ -6,66 +8,8 @@ var gqmax;//global scoped max quantity
 var min;//global scoped min field
 var max;//global scoped max field
 var item = {};
-var order = {};
-$(document).ready(function() {
-    // are we running in native app or in a browser?
-    window.isphone = false;
-    if(document.URL.indexOf("http://") === -1 
-        && document.URL.indexOf("https://") === -1) {
-        window.isphone = true;
-    }
-
-    if( window.isphone ) {
-        //$('#log').append ('<p>phone<p>');
-        document.addEventListener("deviceready", onDeviceReady, false);
-    } else {
-        //$('#log').append('<p>not phone</p>');
-        onDeviceReady();
-    }
-});
-
-/*$('.panel-heading').click(function(){
-    //$('#log').toggle();
-});*/
 
 $('.bercor').change(function(){$('.bercor').val($(this).val())});
-
-function onDeviceReady() {
-    ////$('#log').hide();
-    if( window.isphone ) {
-        db = window.openDatabase("Database", "1.0", "The Database", 200000);
-        db.transaction(setupTable, errorCB, getCurrentOrder);
-    }
-}
-function setupTable(tx){
-    //$('#log').append("<p>setupTable</p>");
-    //tx.executeSql('drop table if exists inventory');
-    tx.executeSql('create table if not exists inventory (bercor, onHand, min, max)');
-    tx.executeSql('create table if not exists orders (Id INTEGER PRIMARY KEY, name, isSubmitted, date)');
-    tx.executeSql('create table if not exists orderItems (orderID, bercor, desc, qty)');
-}
-
-function getCurrentOrder() {
-        //$('#log').append("<p>getCurrentOrder</p>");
-        db.transaction(function(tx){
-        tx.executeSql('SELECT Id FROM orders where isSubmitted = 0', [], getCurrentOrderSuccess, errorCB);
-        }, errorCB);
-}
-
-function getCurrentOrderSuccess(tx, results) {
-        var len = results.rows.length;
-        //$('#log').append("<p>Orders table: " + len + " rows found.</p>");
-        if (len == 0) {
-            //$('#log').append("adding row");
-            newOrder(getCurrentOrder);
-        }else{
-            //$('#log').append("<p>Orders table: " + len + " rows found.</p>");
-            for (var i=0; i<len; i++){
-                //$('#log').append("<p>Row = " + i + " ID = " + results.rows.item(i).Id + " Name =  " + results.rows.item(i).name + "</p>");
-                order.Id=results.rows.item(i).Id;
-            }
-        }
-}
 
 /*********************************/
 /*********SCAN IN OUT*************/
@@ -79,29 +23,10 @@ $('#incInv').click(function(){
         setTimeout(function(){$('#qty').siblings('span').toggleClass('glyphicon-warning-sign');$('#qty').parent().toggleClass('has-warning has-feedback')},3000);
     }
     else{
-        incInv(bercor,parseInt(qty));
+        inv_center = $('option:selected').prop('id');
+        updateInv(bercor,parseInt(qty),inv_center);
     }
 });
-function incInv(bercor,qty){
-        db.transaction(
-            function(tx){
-                tx.executeSql('select onHand from inventory where bercor = ?',[bercor],
-            function(tx,results){
-                //$('#log').append("<p>results rows length:"+results.rows.length+"</p>");
-                if (results.rows.length > 0){ 
-                    //if the bercor already exists, add to the qty
-                    newQty = results.rows.item(0).onHand + qty;
-                    //$('#log').append("<p>newQty: " +newQty+"bercor: "+bercor+"</p>");
-                    tx.executeSql('update inventory set onHand=? where bercor=?',[parseInt(newQty), bercor]);
-                }
-                else
-                {
-                    //if the bercor does not exist, add it with the qty
-                    tx.executeSql('insert into inventory(bercor, onhand) values(?,?)',[bercor,qty]);
-                }
-            },errorCB);
-        },errorCB,function(){$('#qty').siblings('span').toggleClass('glyphicon-ok');$('#qty').parent().toggleClass('has-success has-feedback');setTimeout(function(){$('#qty').siblings('span').toggleClass('glyphicon-ok');$('#qty').parent().toggleClass('has-success has-feedback');$('#qty').val('')},3000)});
-}
 $('#decInv').click(function(){
     bercor = $(this).parent().parent().children('.panel-body').children('.input-group').children('.bercor').val();
     qty = $(this).parent().parent().children('.panel-body').children('.form-group').children('#qty').val();
@@ -111,38 +36,41 @@ $('#decInv').click(function(){
         setTimeout(function(){$('#qty').siblings('span').toggleClass('glyphicon-warning-sign');$('#qty').parent().toggleClass('has-warning has-feedback')},3000);
     }
     else{
-        decInv(bercor,parseInt(qty));
+        inv_center = $('option:selected').prop('id');
+        updateInv(bercor,-parseInt(qty),inv_center);
     }
 });
-function decInv(bercor,qty){
-   db.transaction(
-            function(tx){
-                tx.executeSql('select * from inventory where bercor = ?',[bercor],
-            function(tx,results){
-                //$('#log').append("<p>results rows length:"+results.rows.length+"</p>");
-                if (results.rows.length > 0){ 
-                    //if the bercor already exists, add to the qty
-                    onHand = parseInt(results.rows.item(0).onHand);
-                    newQty = onHand - qty;
-                    //Check min and max
-                    min = parseInt(results.rows.item(0).min);
-                    max = parseInt(results.rows.item(0).max);
-                    if(newQty < min){
-                        item.qty = max - newQty;
-                        item.bercor = bercor;
-                        order.order = true;
-                    }
-                    //$('#log').append("<p>newQty: " +newQty+" bercor: "+bercor+"</p>");
-                    tx.executeSql('update inventory set onHand=? where bercor=?',[newQty, bercor]);
+function updateInv(bercor,qty,inv_center){
+        console.log("incInv");
+         $.ajax({
+            //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
+            url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/update_inventory",
+            //data: "qs=" + result.text,
+            data: "bercor=" + bercor + "&qty=" + qty + "&inv_center=" + inv_center,
+            statusCode: {
+                404: function() {
+                alert( "page not found" );
+                }} 
+            })
+            .done(function( returnData ) {
+                if(returnData)
+                {
+                    console.log(returnData);
+                    $('#qty').siblings('span').toggleClass('glyphicon-ok');
+                    $('#qty').parent().toggleClass('has-success has-feedback');
+                    setTimeout(function(){
+                        $('#qty').siblings('span').toggleClass('glyphicon-ok');
+                        $('#qty').parent().toggleClass('has-success has-feedback');
+                        $('#qty').val('');
+                    },3000); 
                 }
                 else
                 {
-                    //if the bercor does not exist, do nothing
-                    //tx.executeSql('insert into inventory(bercor, onhand) values(?,?)',[bercor,qty]);
-                }
-            },errorCB);
-        },errorCB,function(){$('#qty').siblings('span').toggleClass('glyphicon-ok');$('#qty').parent().toggleClass('has-success has-feedback');setTimeout(function(){$('#qty').siblings('span').toggleClass('glyphicon-ok');$('#qty').parent().toggleClass('has-success has-feedback');$('#qty').val('')},3000);if(order.order){ajax(item.bercor,item.qty)}});
+                    alert("An Error Occurred");
+                } 
+            });  
 }
+
 /*********************************/
 /*********MIN MAX*****************/
 /*********************************/
@@ -150,9 +78,9 @@ $('#mmUpdate').click(function(){
     bercor = $(this).parent().parent().children('.panel-body').children('.input-group').children('.bercor').val();
     min = $(this).parent().parent().children('.panel-body').children('.form-group').children('#min').val();    
     max = $(this).parent().parent().children('.panel-body').children('.form-group').children('#max').val();    
-    
+    console.log(min+'-'+max+'-'+inv_center+'-');
     if(min&&max){
-        setMinMax(bercor,min,max);
+        setMinMax(bercor,min,max,inv_center);
     }
     else{ 
         if(!min){
@@ -167,47 +95,73 @@ $('#mmUpdate').click(function(){
         }
     }
 });
-function setMinMax(bercor,min,max) {
-     db.transaction(
-            function(tx){
-                tx.executeSql('select * from inventory where bercor = ?',[bercor],
-            function(tx,results){
-                //$('#log').append("<p>results rows length:"+results.rows.length+"</p>");
-                if (results.rows.length > 0){ 
-                    //if the bercor already exists, change onhand
-                    //$('#log').append("<p>changing to min: "+min+"</p>");
-                    tx.executeSql('update inventory set min=?, max=? where bercor=?',[min, max, bercor]);
-                }
-                else
-                {
-                    tx.executeSql('insert into inventory(bercor, min, max) values(?,?,?)',[bercor, min, max]);
-                }                  
-            },errorCB);
-        },errorCB,function(){$('#min').siblings('span').toggleClass('glyphicon-ok');$('#max').siblings('span').toggleClass('glyphicon-ok');$('#min').parent().toggleClass('has-success has-feedback');$('#max').parent().toggleClass('has-success has-feedback');setTimeout(function(){$('#max').siblings('span').toggleClass('glyphicon-ok');$('#min').siblings('span').toggleClass('glyphicon-ok');$('#min').parent().toggleClass('has-success has-feedback');$('#max').parent().toggleClass('has-success has-feedback');$('#min').val('');$('#max').val('');},3000);});
+function setMinMax(bercor,min,max,inv_center) {
+    console.log("setMinMax");
+     $.ajax({
+        //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
+        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/update_inventory",
+        //data: "qs=" + result.text,
+        data: "bercor=" + bercor + "&min=" + min + "&max=" + max + "&inv_center=" + inv_center,
+        statusCode: {
+            404: function() {
+            alert( "page not found" );
+            }} 
+        })
+        .done(function( returnData ) {
+            if(returnData)
+            {
+                $('#min').siblings('span').toggleClass('glyphicon-ok');
+                $('#max').siblings('span').toggleClass('glyphicon-ok');
+                $('#min').parent().toggleClass('has-success has-feedback');
+                $('#max').parent().toggleClass('has-success has-feedback');
+                setTimeout(function(){
+                    $('#max').siblings('span').toggleClass('glyphicon-ok');
+                    $('#min').siblings('span').toggleClass('glyphicon-ok');
+                    $('#min').parent().toggleClass('has-success has-feedback');
+                    $('#max').parent().toggleClass('has-success has-feedback');
+                    $('#min').val('');$('#max').val('');
+                },3000); 
+            }
+            else
+            {
+                alert("An Error Occurred");
+            } 
+        });      
 }
 $('#mmCheck').click(function(){
     bercor = $(this).parent().parent().children('.panel-body').children('.input-group').children('.bercor').val();
     min = $(this).parent().parent().children('.panel-body').children('.form-group').children('#min');    
     max = $(this).parent().parent().children('.panel-body').children('.form-group').children('#max');
     if(bercor){
-        getMinMax(bercor);       
+        getMinMax(bercor,min,max);
     }
 });
-function getMinMax(bercor) {
-    db.transaction(
-            function(tx){
-                tx.executeSql('select * from inventory where bercor = ?',[bercor],
-            function(tx,results){
-                //$('#log').append("<p>results rows length:"+results.rows.length+"</p>");
-                if (results.rows.length > 0){ 
-                    //if the bercor already exists, change onhand
-                    gqmin = parseInt(results.rows.item(0).min);
-                    gqmax = parseInt(results.rows.item(0).max);
-                }             
-            },errorCB);
-        },errorCB,function(){min.val(gqmin); max.val(gqmax);});
-
+function getMinMax(bercor,min,max){
+     console.log("getMinMax");
+     $.ajax({
+        //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
+        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_inventory",
+        //data: "qs=" + result.text,
+        data: "bercor=" + bercor + "&inv_center=" + inv_center,
+        statusCode: {
+            404: function() {
+            alert( "page not found" );
+            }} 
+        })
+        .done(function( returnData ) {
+            if(returnData)
+            {
+                item = jQuery.parseJSON( returnData );
+                min.val(item.min);
+                max.val(item.max);
+            }
+            else
+            {
+                alert("An Error Occurred");
+            } 
+        });      
 }
+
 /*********************************/
 /*********ON HAND*****************/
 /*********************************/
@@ -223,82 +177,67 @@ $('#ohUpdate').click(function(){
         setOH(bercor,parseInt(oh));
     }
 });
-/*
-function decInv(bercor,qty){
-   db.transaction(
-            function(tx){
-                tx.executeSql('select * from inventory where bercor = ?',[bercor],
-            function(tx,results){
-                //$('#log').append("<p>results rows length:"+results.rows.length+"</p>");
-                if (results.rows.length > 0){ 
-                    //if the bercor already exists, add to the qty
-                    onHand = parseInt(results.rows.item(0).onHand);
-                    newQty = onHand - qty;
-                    //Check min and max
-                    min = parseInt(results.rows.item(0).min);
-                    max = parseInt(results.rows.item(0).max);
-                    if(newQty < min){
-                        item.qty = max - newQty;
-                        item.bercor = bercor;
-                        order.order = true;
-                    }
-                    //$('#log').append("<p>newQty: " +newQty+" bercor: "+bercor+"</p>");
-                    tx.executeSql('update inventory set onHand=? where bercor=?',[newQty, bercor]);
-                }
-                else
-                {
-                    //if the bercor does not exist, do nothing
-                    //tx.executeSql('insert into inventory(bercor, onhand) values(?,?)',[bercor,qty]);
-                }
-            },errorCB);
-        },errorCB,function(){$('#qty').siblings('span').toggleClass('glyphicon-ok');$('#qty').parent().toggleClass('has-success has-feedback');setTimeout(function(){$('#qty').siblings('span').toggleClass('glyphicon-ok');$('#qty').parent().toggleClass('has-success has-feedback');$('#qty').val('')},3000);if(order.order){ajax(item.bercor,item.qty)}});
-}
-*/
 function setOH(bercor,qty) {
-     db.transaction(
-            function(tx){
-                tx.executeSql('select * from inventory where bercor = ?',[bercor],
-            function(tx,results){
-                //$('#log').append("<p>results rows length:"+results.rows.length+"</p>");
-                if (results.rows.length > 0){ 
-                    //Check min and max
-                    min = parseInt(results.rows.item(0).min);
-                    max = parseInt(results.rows.item(0).max);
-                    if(qty < min){
-                        item.qty = max - qty;
-                        item.bercor = bercor;
-                        order.order = true;
-                    }
-                    //$('#log').append("<p>changing to qty: "+qty+"</p>");
-                    tx.executeSql('update inventory set onHand=? where bercor=?',[qty, bercor]);
-                }
-                else
-                {
-                    tx.executeSql('insert into inventory(bercor, onhand) values(?,?)',[bercor,qty]);
-                }                  
-            },errorCB);
-        },errorCB,function(){$('#onHand').siblings('span').toggleClass('glyphicon-ok');$('#onHand').parent().toggleClass('has-success has-feedback');setTimeout(function(){$('#onHand').siblings('span').toggleClass('glyphicon-ok');$('#onHand').parent().toggleClass('has-success has-feedback');$('#onHand').val('');},3000);if(order.order){ajax(item.bercor,item.qty)}});
+     console.log("setOH");
+     $.ajax({
+        //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
+        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/update_inventory",
+        //data: "qs=" + result.text,
+        data: "bercor=" + bercor + "&qty=" + qty + "&inv_center=" + inv_center + "&action=setOH",
+        statusCode: {
+            404: function() {
+            alert( "page not found" );
+            }} 
+        })
+        .done(function( returnData ) {
+            if(returnData)
+            {
+                console.log(returnData);
+             $('#onHand').siblings('span').toggleClass('glyphicon-ok');
+             $('#onHand').parent().toggleClass('has-success has-feedback');
+             setTimeout(function(){
+                $('#onHand').siblings('span').toggleClass('glyphicon-ok');
+                $('#onHand').parent().toggleClass('has-success has-feedback');
+                $('#onHand').val('');
+             },3000);
+            }
+            else
+            {
+                alert("An Error Occurred");
+            } 
+        });      
+
 }
 $('#ohCheck').click(function(){
     bercor = $(this).parent().parent().children('.panel-body').children('.input-group').children('.bercor').val();
     oh = $(this).parent().parent().children('.panel-body').children('.form-group').children('#onHand');    
     if(bercor){
-        getOH(bercor);
+        getOH(bercor,oh);
     }
 });
-function getOH(bercor) {
-    db.transaction(
-            function(tx){
-                tx.executeSql('select onHand from inventory where bercor = ?',[bercor],
-            function(tx,results){
-                //$('#log').append("<p>results rows length:"+results.rows.length+"</p>");
-                if (results.rows.length > 0){ 
-                    //if the bercor already exists, add to the qty
-                    gQTY = parseInt(results.rows.item(0).onHand);
-                    //$('#log').append("<p>qty: "+gQTY+"</p>");
-                }                  
-            },errorCB);
-        },errorCB,function(){oh.val(gQTY)});
+function getOH(bercor,oh) {
+    console.log("getOH");
+     $.ajax({
+        //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
+        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_inventory",
+        //data: "qs=" + result.text,
+        data: "bercor=" + bercor + "&inv_center=" + inv_center,
+        statusCode: {
+            404: function() {
+            alert( "page not found" );
+            }} 
+        })
+        .done(function( returnData ) {
+            if(returnData)
+            {
+                item = jQuery.parseJSON( returnData );
+                oh.val(item.onHand);
+            }
+            else
+            {
+                alert("An Error Occurred");
+            } 
+        });    
 }
 /******************************/
 /*********SCAN*****************/
@@ -370,4 +309,3 @@ function errorCB(err) {
 function successCB() {
     //$('#log').append("<p>success!</p>");
 } 
-
