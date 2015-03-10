@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+        <title>Barcode Scanner Demo</title>
+    </head>
+    <body>
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">ScanDat</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span>  Home</a></li>
+              <li><a href="orders.html">Order</a></li>
+              <li><a href="inventory.html">Inventory</a></li>
+              <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">View<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li><a href="view_orders.html">Orders</a></li>
+                      <li><a href="view_inventory.html">Inventory</a></li>
+                      <li><a href="view_info.html">Help/About</a></li>
+                  </ul>
+              </li>
+            </ul>
+          </div><!--/.navbar-collapse -->
+        </div>
+      </nav>
+        <div class="container">
+            <div class="page-header" style = "margin: 20px 0 20px;">
+              <h3>Current Order <small>The items you add to order are collected here. Place the order when ready.</small></h3>
+          </div>
+            <div  class="panel panel-primary">
+              <div class="panel-heading">
+                
+                  <div class="form-group">
+                    <label class="sr-only" for="po">Order Name (PO)</label> 
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="po" placeholder="Order Name">
+                      <span class="input-group-btn">
+                        <button id="poUpdate" class="btn btn-default">Update</button>
+                      </span>
+                     </div><!--/input-group-->   
+                  </div><!--/form-group-->
+                
+              </div><!--/panel heading-->
+              <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="current" style="font-size:16px">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Bercor</th>
+                          <th>Desc</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                </div><!--/table-responsive-->
+              </div><!--/panel-body-->
+              <div class="panel-footer">
+                <button id="update" class="btn btn-primary">Update</button>
+                <button id="placeOrder" class="btn btn-success">Place Order</button>
+              </div><!--/panel-footer-->              
+            </div><!--/panel panel-primary-->
+        </div> <!-- Container -->
+        
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+          <script type="text/javascript" src="js/orders.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        
+    </body>
+</html>
