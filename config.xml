@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="2.0" encoding="UTF-8"?>
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "com.phonegap.joekincognito.barcodedemo"
+        id        = "com.phonegap.joekincognito.scanDat"
         version   = "1.5.0">
-    <name>GWB Scan App</name>
+    <name>scanDat 2.0</name>
 
     <description>
-        Provides GWB Customers the ability to scan barcodes to order products as well as manage inventory. 
+        New Update! Stores data on web server to allow users to manage different inventory centers and keep them in sync. As well as provides GWB Customers the ability to scan barcodes to order products as well as manage inventory. 
     </description>
 
     <author href="http://gwberkheimer.com" email="jkelley@gwberkheimer.com">
