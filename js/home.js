@@ -24,6 +24,23 @@ var customer = {};
         addToOrder(item);      
     }
 });
+$('#scan').click(function(){
+    var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+    scanner.scan( function (result) { 
+
+        if(!(result.text.toString().length===5 || result.text.toString().length===6)){
+            alert("Scan Error or invalid barcode\n" +
+             "Please Try Again!");
+        }
+        else 
+        {
+            ajax(result.text,null);
+        }
+    }, function (error) { 
+        //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
+    });
+    
+});
 function ajax(number){ //number will bercor
         console.log("ajax");
         $.ajax({
