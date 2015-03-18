@@ -185,7 +185,7 @@ function prepare_order(){
     .done(function( returnData ) {
         if(returnData){
             //console.log(returnData);
-            $('.panel-footer').append('<br>'+returnData'</br>');
+            $('.panel-footer').append('<br>'+returnData+'</br>');
             place_order(returnData);
         }
         else{
@@ -205,7 +205,7 @@ $('.panel-footer').append('<br>prepare_order</br>');
                 }} 
             })
             .done(function( returnData ) {
-                $('.panel-footer').append('<br>'+returnData'</br>');
+                $('.panel-footer').append('<br>'+returnData+'</br>');
                 if (returnData == "Order Placed Successfully!"){
                     navigator.notification.alert(
                         returnData, //message
@@ -234,7 +234,7 @@ function order_success_callback(){
             }} 
         })
     .done(function( returnData ) {
-        $('.panel-footer').append('<br>'+returnData'</br>');
+        $('.panel-footer').append('<br>'+returnData+'</br>');
        if (returnData == "true"){
           navigator.notification.alert(
               "Order Marked Submitted", //message
