@@ -248,3 +248,4 @@ function order_success_callback(){
                       );
       }
     });
+}
