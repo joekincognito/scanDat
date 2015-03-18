@@ -22,84 +22,61 @@ $(document).ready(function() {
     });
 });
 
-/*$('.panel-heading').click(function(){
-    //$('#log').toggle();
-});*/
 
 function onDeviceReady() {
     //$('#log').hide();
-    if( window.isphone ) {
-        db = window.openDatabase("Database", "1.0", "The Database", 200000);
-        db.transaction(setupTable, errorCB, getOrders);
-    }
-}
-function setupTable(tx){
-    //$('#log').append("<p>setupTable</p>");
-    tx.executeSql('create table if not exists orders (Id INTEGER PRIMARY KEY, name, isSubmitted, date)');
-    tx.executeSql('create table if not exists orderItems (orderID, bercor, desc, qty)');
-}
-function getOrders() {
-    //$('#log').append("<p>getInventory</p>");
-    db.transaction(function(tx){
-        tx.executeSql('SELECT * FROM orders inner join orderItems on Id = orderID WHERE (qty > 0 and isSubmitted = 1)', [], getOrdersSuccess, errorCB);
-        //need a join here for orderItems
-    }, errorCB);
+    getOrders();
 }
 
-function getOrdersSuccess(tx, results) {
-    //$('#log').append("<p>getInventorySuccess</p>");
-        var len = results.rows.length;
-        //$('#log').append("<p>Order table: " + len + " rows found.</p>");
-        
-        var name = results.rows.item(0).name;
-        var orderholder = '<div class="panel panel-primary">'+
+function getOrders() {
+        $.ajax({
+            url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_orders_as_json",
+            statusCode: {
+                404: function() {
+                alert( "page not found" );
+                }} 
+            })
+            .done(function( result ) {
+                console.log("returnData is: " + result);
+                if(result)
+                {
+                    result = JSON.parse(result);                  
+                    getOrdersSuccess(result);
+                }
+                else
+                {
+                    alert("An Error has occurred");
+                }
+            });  
+}
+function getOrdersSuccess( results) {
+
+        orders = results.orders;
+        order_items = results.order_items;
+        $.each( orders, function( index, order ){
+        var ordersHtml = '<div class="panel panel-primary">'+
                             '<div class="panel-heading order-heading">'+
                               '<h4 style="margin-top:0px;margin-bottom:0px" class="row">' +
-                              '<span class="col-md-5">'+results.rows.item(0).date.substring(4,15)+'</span><span class="col-md-5">'+ name + '</span>'+
+                              '<span class="col-md-5">'+order.date.substring(0,11)+'</span><span class="col-md-5">'+ name + '</span>'+
                               '<span class="col-md-2"><span class="caret pull-right" style="border-top: 8px solid; border-right: 8px solid transparent; border-left: 8px solid transparent;"></span></span></h4>'+
                             '</div>';
-            orderholder += '<div class="panel-body order-body hidden">'+
+            ordersHtml += '<div class="panel-body order-body hidden">'+
                               '<div class="table-responsive">'+
                                 '<table class="table table-bordered" style="font-size:16px">'+
                                   '<thead>'+
-                                    '<tr><th>#</th><th>Bercor</th><th>Desc</th></tr>'+
+                                    '<tr><th>Qty</th><th>Bercor</th><th>Desc</th></tr>'+
                                   '</thead>'+
-                                  '<tbody>';
-        for (var i=0; i<len; i++){
-            var result=results.rows.item(i);
-            if (name == results.rows.item(i).name)
-            {
-                orderholder +='<tr><td>'+results.rows.item(i).qty+'</td><td>'+results.rows.item(i).bercor+'</td><td>'+results.rows.item(i).desc+'</td></tr>';
+                                  '<tbody id="table'+order.id+'"">';
+            ordersHtml +='</tbody></table></div></div></div>';                                  
+            $('#orderHistory').append(ordersHtml);
+        });
+        //for (var i=0; i<len; i++){
+        $.each( order_items, function( index, item ){
+                tablename="#table"+item.orders_id;
+                $(tablename).append('<tr><td>'+item.qty+'</td><td>'+item.bercor+'</td><td>'+item.description+'</td></tr>');
                 //orderholder +='<span>'+ result.desc + '</span>');   
-            }
-            else
-            {
-                orderholder +='</tbody></table></div></div></div>';
-                var name = result.name;
-                orderholder += '<div class="panel panel-primary">'+
-                                 '<div class="panel-heading order-heading">'+
-                                   '<h4 style="margin-top:0px;margin-bottom:0px" class="row">' +
-                              '<span class="col-md-5">'+results.rows.item(i).date.substring(4,15)+'</span><span class="col-md-5">'+ name + '</span>'+
-                              '<span class="col-md-2"><span class="caret pull-right" style="border-top: 8px solid; border-right: 8px solid transparent; border-left: 8px solid transparent;"></span></span></h4>'+
-                            '</div>';
-                orderholder +=    '<div class="panel-body order-body hidden">'+
-                                     '<div class="table-responsive">'+
-                                        '<table class="table table-bordered" style="font-size:16px">'+
-                                          '<thead>'+
-                                            '<tr><th>#</th><th>Bercor</th><th>Desc</th></tr>'+
-                                          '</thead>'+
-                                          '<tbody>';
-                 orderholder +='<tr><td>'+results.rows.item(i).qty+'</td><td>'+results.rows.item(i).bercor+'</td><td>'+results.rows.item(i).desc+'</td></tr>';
-                //orderholder +='<p>'+ name + '</p>');        
-            }
-            //orderholder +='<ul><li>'+ result.name + '</li></ul>');
-
-            //order name
-            //each order item  --< hidden...expand to reveal
-            //$('tbody').append('<tr id='+results.rows.item(i).Id+'><td>'+results.rows.item(i).bercor+'</td><td>'+results.rows.item(i).onHand+'</td><td>'+results.rows.item(i).min+'</td><td>'+results.rows.item(i).max+'</td></tr>');
-        }
-        orderholder +='</tbody></table></div></div></div>';
-        $('#orderHistory').append(orderholder);
+        });
+ 
         //$('#orderHistory').text($('#orderHistory').html());
 }
 
@@ -110,4 +87,3 @@ function errorCB(err) {
 function successCB() {
     //$('#log').append("<p>success!</p>");
 } 
-

@@ -39,22 +39,21 @@
         </div>
       </nav>
         <div class="container">
-            <div class="page-header" style = "margin: 20px 0 20px;">
+           <div class="page-header" style = "margin: 20px 0 20px;">
               <h3>Current Order <small>The items you add to order are collected here. Place the order when ready.</small></h3>
           </div>
             <div  class="panel panel-primary">
               <div class="panel-heading">
-                
                   <div class="form-group">
                     <label class="sr-only" for="po">Order Name (PO)</label> 
                     <div class="input-group">
-                      <input type="text" class="form-control" id="po" placeholder="Order Name">
+                      <input type="text" class="form-control role-based" id="po">
+                      <span style="position:absolute;top:0px;left:-10px;" class="glyphicon form-control-feedback"></span>
                       <span class="input-group-btn">
-                        <button id="poUpdate" class="btn btn-default">Update</button>
+                        <button id="poUpdate" class="btn btn-default role-based">Update</button>
                       </span>
                      </div><!--/input-group-->   
                   </div><!--/form-group-->
-                
               </div><!--/panel heading-->
               <div class="panel-body">
                 <div class="table-responsive">
@@ -64,16 +63,19 @@
                           <th>#</th>
                           <th>Bercor</th>
                           <th>Desc</th>
+                          <th>User</th>
                         </tr>
                       </thead>
                       <tbody>
+                        
                       </tbody>
                     </table>
                 </div><!--/table-responsive-->
               </div><!--/panel-body-->
               <div class="panel-footer">
                 <button id="update" class="btn btn-primary">Update</button>
-                <button id="placeOrder" class="btn btn-success">Place Order</button>
+                <button id="placeOrder" class="btn btn-success role-based">Place Order</button>
+                <div id="info"></div>
               </div><!--/panel-footer-->              
             </div><!--/panel panel-primary-->
         </div> <!-- Container -->

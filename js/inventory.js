@@ -1,6 +1,4 @@
 var order = {};
-order = <?php echo json_encode($order).';';?>
-var inv_center = $('option:selected').prop('id');
 var gQTY; //global scoped qty
 var oh; //global scoped onHand qty field
 var gqmin; //global scoped min quantity
@@ -8,6 +6,62 @@ var gqmax;//global scoped max quantity
 var min;//global scoped min field
 var max;//global scoped max field
 var item = {};
+var inv_center = $('#iCenter option:selected').prop('id');
+
+$(document).ready(function() {
+    // are we running in native app or in a browser?
+    window.isphone = false;
+    if(document.URL.indexOf("http://") === -1 
+        && document.URL.indexOf("https://") === -1) {
+        window.isphone = true;
+    }
+    if( window.isphone ) {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } else {
+        onDeviceReady();
+    }
+});
+$('#iCenter').change(function(){
+    inv_center = $('#iCenter option:selected').prop('id');
+});
+function onDeviceReady() {
+  getInventoryCenters();
+}
+function getInventoryCenters(){
+  $.ajax({
+            //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
+            url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_inventory_centers_as_json",
+            //data: "qs=" + result.text,
+            statusCode: {
+                404: function() {
+                alert( "page not found" );
+                }} 
+            })
+            .done(function( result ) {
+                console.log("returnData is: " + result);
+                if(result)
+                {
+                    result = JSON.parse(result);                  
+                    getInventoryCentersSuccess(result);
+                }
+                else
+                {
+                    alert("An Error has occurred");
+                }
+            });  
+}
+function getInventoryCentersSuccess(result){
+        iCenters = result.inventory_centers;
+        
+        var htmlString ="";
+        $.each( iCenters, function( index, center ){
+            htmlString += "<option id="+center.id+">";
+            htmlString += center.name;
+            htmlString += "</option>"; 
+        });
+
+        $('select').html(htmlString);
+}
 
 $('.bercor').change(function(){$('.bercor').val($(this).val())});
 
@@ -23,7 +77,7 @@ $('#incInv').click(function(){
         setTimeout(function(){$('#qty').siblings('span').toggleClass('glyphicon-warning-sign');$('#qty').parent().toggleClass('has-warning has-feedback')},3000);
     }
     else{
-        inv_center = $('option:selected').prop('id');
+        //inv_center = $('option:selected').prop('id');
         updateInv(bercor,parseInt(qty),inv_center);
     }
 });
@@ -36,7 +90,7 @@ $('#decInv').click(function(){
         setTimeout(function(){$('#qty').siblings('span').toggleClass('glyphicon-warning-sign');$('#qty').parent().toggleClass('has-warning has-feedback')},3000);
     }
     else{
-        inv_center = $('option:selected').prop('id');
+        //inv_center = $('option:selected').prop('id');
         updateInv(bercor,-parseInt(qty),inv_center);
     }
 });
@@ -137,10 +191,11 @@ $('#mmCheck').click(function(){
     }
 });
 function getMinMax(bercor,min,max){
+     //inv_center = $('option:selected').prop('id');
      console.log("getMinMax");
      $.ajax({
         //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
-        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_inventory",
+        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_inventory_item_as_json",
         //data: "qs=" + result.text,
         data: "bercor=" + bercor + "&inv_center=" + inv_center,
         statusCode: {
@@ -180,9 +235,7 @@ $('#ohUpdate').click(function(){
 function setOH(bercor,qty) {
      console.log("setOH");
      $.ajax({
-        //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
         url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/update_inventory",
-        //data: "qs=" + result.text,
         data: "bercor=" + bercor + "&qty=" + qty + "&inv_center=" + inv_center + "&action=setOH",
         statusCode: {
             404: function() {
@@ -192,7 +245,7 @@ function setOH(bercor,qty) {
         .done(function( returnData ) {
             if(returnData)
             {
-                console.log(returnData);
+             console.log(returnData);
              $('#onHand').siblings('span').toggleClass('glyphicon-ok');
              $('#onHand').parent().toggleClass('has-success has-feedback');
              setTimeout(function(){
@@ -216,11 +269,10 @@ $('#ohCheck').click(function(){
     }
 });
 function getOH(bercor,oh) {
+    //inv_center = $('option:selected').prop('id');
     console.log("getOH");
      $.ajax({
-        //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
-        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_inventory",
-        //data: "qs=" + result.text,
+        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_inventory_item_as_json",
         data: "bercor=" + bercor + "&inv_center=" + inv_center,
         statusCode: {
             404: function() {
@@ -230,6 +282,7 @@ function getOH(bercor,oh) {
         .done(function( returnData ) {
             if(returnData)
             {
+                console.log(returnData);
                 item = jQuery.parseJSON( returnData );
                 oh.val(item.onHand);
             }
