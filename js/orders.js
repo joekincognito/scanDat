@@ -193,13 +193,13 @@ function prepare_order(){
         }
     });
 }
-function place_order(order){
+function place_order(a_order){
 $('.panel-footer').append('<br>place_order</br>');    
     $.ajax({
             url: "http://50.204.18.115/apps/BarcodeDemo/php/order.php",
             //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
             contentType: "application/json",
-            data: "qs=" + order,
+            data: "qs=" + a_order,
             statusCode: {
                 404: function() {
                 alert( "page not found" );
