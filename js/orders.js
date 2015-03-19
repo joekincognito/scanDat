@@ -194,18 +194,23 @@ function prepare_order(){
     });
 }
 function place_order(order){
-$('.panel-footer').append('<br>prepare_order</br>');    
+$('.panel-footer').append('<br>place_order</br>');    
     $.ajax({
-            //url: "http://50.204.18.115/apps/BarcodeDemo/php/order.php",
-            url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
+            url: "http://50.204.18.115/apps/BarcodeDemo/php/order.php",
+            //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
+            contentType: "application/json",
             data: "qs=" + order,
             statusCode: {
                 404: function() {
                 alert( "page not found" );
-                }} 
+                },
+                408: function() {
+                alert( "Access Denied" );
+                }
+            } 
             })
             .done(function( returnData ) {
-                $('.panel-footer').append('<br>'+returnData+'</br>');
+                $('.panel-footer').append('<br>Place order - returnData is: '+returnData+'</br>');
                 if (returnData == "Order Placed Successfully!"){
                     navigator.notification.alert(
                         returnData, //message
