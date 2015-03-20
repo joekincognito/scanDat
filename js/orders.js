@@ -203,9 +203,6 @@ $('.panel-footer').append('<br>place_order</br>');
             statusCode: {
                 404: function() {
                 alert( "page not found" );
-                },
-                408: function() {
-                alert( "Access Denied" );
                 }
             } 
             })
