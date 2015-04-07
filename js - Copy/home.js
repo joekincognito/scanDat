@@ -26,7 +26,8 @@ var customer = {};
 });
 $('#scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    scanner.scan( function (result) {         
+    scanner.scan( function (result) { 
+
         if(!(result.text.toString().length===5 || result.text.toString().length===6)){
             alert("Scan Error or invalid barcode\n" +
              "Please Try Again!");

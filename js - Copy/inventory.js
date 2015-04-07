@@ -6,7 +6,7 @@ var gqmax;//global scoped max quantity
 var min;//global scoped min field
 var max;//global scoped max field
 var item = {};
-var inv_center='1';
+var inv_center = $('#iCenter option:selected').prop('id');
 
 $(document).ready(function() {
     // are we running in native app or in a browser?
@@ -187,10 +187,10 @@ $('#mmCheck').click(function(){
     min = $(this).parent().parent().children('.panel-body').children('.form-group').children('#min');    
     max = $(this).parent().parent().children('.panel-body').children('.form-group').children('#max');
     if(bercor){
-        getMinMax(bercor,min,max,inv_center);
+        getMinMax(bercor,min,max);
     }
 });
-function getMinMax(bercor,min,max,inv_center){
+function getMinMax(bercor,min,max){
      //inv_center = $('option:selected').prop('id');
      console.log("getMinMax");
      $.ajax({
@@ -207,8 +207,8 @@ function getMinMax(bercor,min,max,inv_center){
             if(returnData)
             {
                 item = jQuery.parseJSON( returnData );
-                min.val(item[0].min);
-                max.val(item[0].max);
+                min.val(item.min);
+                max.val(item.max);
             }
             else
             {
@@ -229,10 +229,10 @@ $('#ohUpdate').click(function(){
         setTimeout(function(){$('#onHand').siblings('span').toggleClass('glyphicon-warning-sign');$('#onHand').parent().toggleClass('has-warning has-feedback')},3000);
     }
     else{
-        setOH(bercor,parseInt(oh),inv_center);
+        setOH(bercor,parseInt(oh));
     }
 });
-function setOH(bercor,qty,inv_center) {
+function setOH(bercor,qty) {
      console.log("setOH");
      $.ajax({
         url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/update_inventory",
@@ -265,10 +265,10 @@ $('#ohCheck').click(function(){
     bercor = $(this).parent().parent().children('.panel-body').children('.input-group').children('.bercor').val();
     oh = $(this).parent().parent().children('.panel-body').children('.form-group').children('#onHand');    
     if(bercor){
-        getOH(bercor,oh,inv_center);
+        getOH(bercor,oh);
     }
 });
-function getOH(bercor,oh,inv_center) {
+function getOH(bercor,oh) {
     //inv_center = $('option:selected').prop('id');
     console.log("getOH");
      $.ajax({
@@ -284,7 +284,7 @@ function getOH(bercor,oh,inv_center) {
             {
                 console.log(returnData);
                 item = jQuery.parseJSON( returnData );
-                oh.val(item[0].onHand);
+                oh.val(item.onHand);
             }
             else
             {

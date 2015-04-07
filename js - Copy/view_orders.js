@@ -11,8 +11,10 @@ $(document).ready(function() {
     }
 
     if( window.isphone ) {
+        //$('#log').append ('<p>phone<p>');
         document.addEventListener("deviceready", onDeviceReady, false);
     } else {
+        //$('#log').append('<p>not phone</p>');
         onDeviceReady();
     }
     $('#orderHistory').on("click", ".order-heading", function(){
@@ -22,6 +24,7 @@ $(document).ready(function() {
 
 
 function onDeviceReady() {
+    //$('#log').hide();
     getOrders();
 }
 
@@ -54,7 +57,7 @@ function getOrdersSuccess( results) {
         var ordersHtml = '<div class="panel panel-primary">'+
                             '<div class="panel-heading order-heading">'+
                               '<h4 style="margin-top:0px;margin-bottom:0px" class="row">' +
-                              '<span class="col-md-5">'+order.date.substring(0,11)+'</span><span class="col-md-5">'+ order.name + '</span>'+
+                              '<span class="col-md-5">'+order.date.substring(0,11)+'</span><span class="col-md-5">'+ name + '</span>'+
                               '<span class="col-md-2"><span class="caret pull-right" style="border-top: 8px solid; border-right: 8px solid transparent; border-left: 8px solid transparent;"></span></span></h4>'+
                             '</div>';
             ordersHtml += '<div class="panel-body order-body hidden">'+
@@ -67,10 +70,14 @@ function getOrdersSuccess( results) {
             ordersHtml +='</tbody></table></div></div></div>';                                  
             $('#orderHistory').append(ordersHtml);
         });
+        //for (var i=0; i<len; i++){
         $.each( order_items, function( index, item ){
                 tablename="#table"+item.orders_id;
                 $(tablename).append('<tr><td>'+item.qty+'</td><td>'+item.bercor+'</td><td>'+item.description+'</td></tr>');
+                //orderholder +='<span>'+ result.desc + '</span>');   
         });
+ 
+        //$('#orderHistory').text($('#orderHistory').html());
 }
 
 function errorCB(err) {
