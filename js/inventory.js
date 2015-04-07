@@ -6,7 +6,7 @@ var gqmax;//global scoped max quantity
 var min;//global scoped min field
 var max;//global scoped max field
 var item = {};
-var inv_center='1';
+var inv_center;
 
 $(document).ready(function() {
     // are we running in native app or in a browser?
@@ -61,6 +61,7 @@ function getInventoryCentersSuccess(result){
         });
 
         $('select').html(htmlString);
+        inv_center=$('#iCenter option:eq(0)').prop('id');
 }
 
 $('.bercor').change(function(){$('.bercor').val($(this).val())});
