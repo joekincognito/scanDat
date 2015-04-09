@@ -28,8 +28,13 @@ $('#scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     scanner.scan( function (result) {         
         if(!(result.text.toString().length===5 || result.text.toString().length===6)){
-            alert("Scan Error or invalid barcode\n" +
-             "Please Try Again!");
+            navigator.notification.alert(
+              "Scan Error or Invalid Barcode\n"+
+              "Please Try Again!", //message
+              function(){window.location="home.html"}, //callback
+              'Scan Error',   //Title
+              'OK'                //buttonName
+          );
         }
         else 
         {

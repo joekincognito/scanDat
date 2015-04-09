@@ -65,7 +65,7 @@ function getOrder(){
                 }
             });  
 }
-var tableShell = '<table class="table table-bordered table-striped" style="font-size:16px"><thead><tr><th>#</th><th>Bercor</th><th>Desc</th><th>User</th><th>Order</th></tr></thead><tbody></tbody></table> ';
+var tableShell = '<table class="table table-bordered table-striped table-condensed" style="font-size:16px"><thead><tr><th>#</th><th>Bercor</th><th>Desc</th><th>User</th><th>Order</th></tr></thead><tbody></tbody></table> ';
 var panelShell = ' <div  class="panel panel-primary">'+
                     '<div class="panel-heading">'+
                       '<div class="form-group">'+
