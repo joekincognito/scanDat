@@ -55,6 +55,7 @@ function getOrder(){
             .done(function( result ) {
                 if(result)
                 {
+                    console.log(result);
                     result = JSON.parse(result);                  
                     getOrdersSuccess(result);
                 }
@@ -89,9 +90,9 @@ var panelShell = ' <div  class="panel panel-primary">'+
                    '</div>';
 
 function getOrdersSuccess(results) {
+    var orders=results;
     if(user.role<2){
       var active=true;
-      var orders=results;
       //FOR EACH ORDER
       $.each( results, function( index, order ){
         name = order.name;
@@ -113,6 +114,24 @@ function getOrdersSuccess(results) {
         $(".tab-pane:first-child").addClass('active');
       });
       create_nav_tab('new','+');
+    }
+    else{
+      $('#wrapper').append(tableShell);
+      //FOR EACH ORDER
+      $.each( results, function( index, order ){
+        //FOR EACH ITEM
+        orderID = order.id;
+        $.each( order.items, function( k, v ){
+          if(v.description.charAt(0)=='*'){
+            $('table tbody').append('<tr id='+v.id+' class="orderItem warning"><td><input id="itemQTY" class="watch input-group" name="quantity" type="number" min="1" max="200" style="color:black;" value="'+v.qty+'""></td><td id="bercor">'+v.bercor+ "</td><td>" + v.description + "</td><td>" + v.first_name + " " + v.last_name + "</td><td>"+create_order_options(orders,orderID)+" </td></tr>");
+          }
+          else{            
+            $('table tbody').append('<tr id='+v.id+' class="orderItem"><td><input id="itemQTY" class="watch input-group" name="quantity" type="number" min="1" max="200" style="color:black;" value="'+v.qty+'""></td><td id="bercor">'+v.bercor+ "</td><td>" + v.description + "</td><td>" + v.first_name + " " + v.last_name + "</td><td>"+create_order_options(orders,orderID)+" </td></tr>");
+          }
+        });
+          $('select').prop('disabled','true');
+        });
+      $('#wrapper').append('<button id="update" class="btn btn-primary">Update</button>');
     }
 }
 $('.nav-tabs').on('click',"a[href='#new']", function(){
@@ -138,7 +157,7 @@ function create_tab_panel(tableID,orderID,name){
   $('#'+tableID+' .panel-heading .input-group input').val(name);
 }
 
-$('.tab-content').on("change", ".panel-body .watch", function(){
+$('#wrapper').on("change", ".watch", function(){
     if (!$(this).parent().parent().hasClass("changed")){
         $(this).parent().parent().addClass("changed");
     }
@@ -204,9 +223,16 @@ $('.tab-content').on("click",".panel-heading button", function(){
   }
 });
 //UPDATE BUTTON CLICK
-$('.tab-content').on("click","#update", function(){
+$('#wrapper').on("click","#update", function(){
   var items = [];
-  changedOrderItems=$(this).parent().siblings('.panel-body').children().children().children('.changed')
+  //changedOrderItems=$(this).parent().siblings('.panel-body').children().children().children('.changed')
+if(user.role<2){
+  changedOrderItems=$(this).parent().siblings('.panel-body').children().children().children('.changed');
+}
+else{
+  changedOrderItems=$('.changed');
+  console.log(changedOrderItems);
+}
   if(changedOrderItems.length > 0){
     changedOrderItems.each(function(){
       item = [];
@@ -216,7 +242,9 @@ $('.tab-content').on("click","#update", function(){
     update_order(items);
   }
   else{
+  if(user.role<2){
     $(this).parent().siblings('.panel-heading').children('.form-group').children('.input-group').children('.input-group-btn').children('#poUpdate').click();
+  }
   }
 });
 //Delete Order Button Click
