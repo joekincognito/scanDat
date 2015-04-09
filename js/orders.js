@@ -55,7 +55,8 @@ function getOrder(){
             .done(function( result ) {
                 if(result)
                 {
-                    console.log(result);
+                    //console.log(result);
+                    $('#wrapper').append('<p>'+result+'</p>');
                     result = JSON.parse(result);                  
                     getOrdersSuccess(result);
                 }
