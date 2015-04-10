@@ -82,10 +82,18 @@ var panelShell = ' <div  class="panel panel-primary">'+
                     '<div class="panel-body">'+
                     '</div>'+
                     '<div class="panel-footer">'+
-                      '<button id="update" class="btn btn-primary">Update</button>'+
-                      '<button id="placeOrder" class="btn btn-success role-based">Place Order</button>'+
-                      '<button id="deleteOrder" class="btn btn-danger role-based">Delete Order</button>'+
-                      '<div id="info"></div>'+                    
+                    '<div class="row">'+
+                    '<div class="col-md-4">'+
+                      '<button id="update" class="btn btn-primary">Update Order</button>'+
+                    '</div>'+
+                    '<div class="col-md-4">'+
+                      '<button id="placeOrder" class="btn btn-success role-based center-block">Place Order</button>'+
+                    '</div>'+
+                    '<div class="col-md-4">'+
+                      '<button id="deleteOrder" class="btn btn-danger role-based pull-right">Delete Order</button>'+
+                    '</div>'+
+                      '<div id="info"></div>'+
+                    '</div>'+
                     '</div>'+
                    '</div>';
 
