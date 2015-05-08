@@ -17,7 +17,7 @@
         <p class="text-center" style="color:#BBB;font-weight:bold;font-size:25px;margin-top:6px;margin-bottom:2px;">Login</p>
     </nav>
 <div class="container">
-<div id="infoMessage" ></div>
+
 <style>
 
 .form-signin .form-control {
@@ -44,6 +44,7 @@
           <input type="checkbox" id="remember" value="remember-me"> Remember me
         </label>
     </div>
+    <div id="infoMessage" ></div>
         <button class="btn btn-lg btn-primary btn-block" id="login">Sign in</button>
 </div></div>
 <div class="footer">
@@ -81,6 +82,10 @@ function login(username,password,remember){
                 {
                 	window.location.href = "home.html";
                 }
+                else 
+                {
+                    $('#infoMessage').html('<div class="container bg-danger"><h5 class="text-danger">Login failed, try again</h5></div>');
+                }    
             });      
 }
 </script>
