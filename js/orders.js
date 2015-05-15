@@ -2,7 +2,7 @@ var order = {};
 var item = {};
 var customer = {};
 var user = {};
-var phone;
+var phone = false;
 $(document).ready(function() {
     // are we running in native app or in a browser?
     window.isphone = false;
@@ -235,11 +235,11 @@ $('#wrapper').on("click","#update", function(){
   var items = [];
   //changedOrderItems=$(this).parent().siblings('.panel-body').children().children().children('.changed')
 if(user.role<2){
-  changedOrderItems=$(this).parent().siblings('.panel-body').children().children().children('.changed');
+  changedOrderItems=$(this).parents('.panel-footer').siblings('.panel-body').children().children().children('.changed');
 }
 else{
   changedOrderItems=$('.changed');
-  console.log(changedOrderItems);
+  //console.log(changedOrderItems);
 }
   if(changedOrderItems.length > 0){
     changedOrderItems.each(function(){
@@ -367,21 +367,31 @@ function order_success_callback(){
         })
     .done(function( returnData ) {
        if (returnData == "true"){
+        if(phone){
           navigator.notification.alert(
               "Order Marked Submitted", //message
               function(){window.location="home.html"}, //callback
               'Order Marked Submitted!',   //Title
               'OK'                //buttonName
           );
+        }
+        else{
+          alert('The Order Has Been Submitted');
+        }
       }
       else
       {
+        if(phone){
           navigator.notification.alert(
                           "Order Not Marked Submitted", //message
                           function(){window.location="Home.html"}, //callback
                           'Order Not Marked Submitted ',   //Title
                           'OK'                //buttonName
                       );
+        }
+        else{
+          alert("The order was not marked submitted, Please Notify jkelley@gwberkheimer.com")
+        }
       }
     });
   
