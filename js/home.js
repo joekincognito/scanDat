@@ -28,6 +28,10 @@ $('#scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     scanner.scan( function (result) {         
         if(!(result.text.toString().length===5 || result.text.toString().length===6)){
+            if(result.text.toString().length===12){
+                number=result.text.substring(6,11);
+                ajax(number,null);
+            }
             navigator.notification.alert(
               "Scan Error or Invalid Barcode\n"+
               "Please Try Again!", //message
