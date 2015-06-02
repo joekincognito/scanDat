@@ -27,11 +27,7 @@ var customer = {};
 $('#scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     scanner.scan( function (result) {         
-        if(!(result.text.toString().length===5 || result.text.toString().length===6)){
-            if(result.text.toString().length===12){
-                number=result.text.substring(6,11);
-                ajax(number,null);
-            }
+        if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
             navigator.notification.alert(
               "Scan Error or Invalid Barcode\n"+
               "Please Try Again!", //message
@@ -42,7 +38,13 @@ $('#scan').click(function(){
         }
         else 
         {
-            ajax(result.text,null);
+            if(result.text.toString().length===12){
+                number=result.text.substring(6,11);
+                ajax(number,null);
+            }
+            else{
+                ajax(result.text,null);
+            }
         }
     }, function (error) { 
         //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
