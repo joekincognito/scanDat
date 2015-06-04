@@ -75,10 +75,12 @@ $(document).ready(function() {
             }} 
         })
         .done(function( returnData ) {
-            $('#info').html(returnData);
             if(returnData=='yes'){
+                $('#info').html('yes');
                 //window.location=index.html;
-
+            }
+            else{
+                $('#info').html('no');
             }
         });      
 });
