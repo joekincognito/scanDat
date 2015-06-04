@@ -105,8 +105,6 @@ function setupTables(tx){
 }
 function store_info(u,p){
     db.transaction(function(tx){
-        tx.executeSql('drop table namePass');
-        tx.executeSql('create table if not exists namePass (u,p)');
         tx.executeSql('insert into namePass(u,p) values(?,?)',[u,p]);
     },errorCB);
 }
