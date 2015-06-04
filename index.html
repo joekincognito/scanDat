@@ -49,6 +49,7 @@
 </div></div>
 <div class="footer">
     <div class="container">
+        <div id="info"></div>
         <p class="text-center text-muted">G.W. Berkheimer Co Inc. - &copy; <script>document.write(new Date().getFullYear())</script></p>
     </div>
 </div>
@@ -60,6 +61,59 @@
 
 
 <script>
+
+
+/************************************
+***Ajax - logged in? - yes?>home page
+************************************/
+    $.ajax({
+        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/login_status",
+        statusCode: {
+            404: function() {
+            alert( "page not found" );
+            }} 
+        })
+        .done(function( returnData ) {
+            if(returnData=='yes'){
+                window.location=index.html;
+            }
+        });      
+/*
+----------------------------------------------------------------
+-- Start of local storage for username and password --
+----------------------------------------------------------------
+$(document).ready(function() {
+    // are we running in native app or in a browser?
+    window.isphone = false;
+    if(document.URL.indexOf("http://") === -1 
+        && document.URL.indexOf("https://") === -1) {
+        window.isphone = true;
+    }
+
+    if( window.isphone ) {
+        //$('#log').append('<p>phone</p>');
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } 
+});
+
+function onDeviceReady() {
+        db = window.openDatabase("Database", "1.0", "The Database", 200000);
+        db.transaction(setupTables, errorCB, popFields);
+}
+
+function setupTables(tx){
+    tx.executeSql('create table if not exists namePass (u,p)');
+    //db.transaction(function(tx){
+            tx.executeSql('select * from namePass',[],function(tx,results){
+                if(!results.rows.length==0){
+                window.location="customer.html";
+                }
+            },errorCB)
+    //    },errorCB, null);
+}
+*/
+
+
 $('#login').click(function(){
 username = $('#username').val();
 password = $('#password').val();
