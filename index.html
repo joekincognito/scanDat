@@ -47,6 +47,10 @@
     <div id="infoMessage" ></div>
         <button class="btn btn-lg btn-primary btn-block" id="login">Sign in</button>
 </div></div>
+<div>
+<p class="alert alert-warning">Work in Progress</p>
+<p class="alert alert-danger" id="log"></p>
+</div>
 <div class="footer">
     <div class="container">
         <div id="info"></div>
@@ -61,33 +65,11 @@
 
 
 <script>
-
-
-/************************************
-***Ajax - logged in? - yes?>home page
-************************************/
-$(document).ready(function() {    
-    $.ajax({
-        url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/login_status",
-        statusCode: {
-            404: function() {
-            alert( "page not found" );
-            }} 
-        })
-        .done(function( returnData ) {
-            if(returnData=='yes'){
-                $('#info').html('yes');
-                //window.location=index.html;
-            }
-            else{
-                $('#info').html('no');
-            }
-        });      
-});
+var stored_info=false;
 /*
 ----------------------------------------------------------------
 -- Start of local storage for username and password --
-----------------------------------------------------------------
+--------------------------------------------------------------*/
 $(document).ready(function() {
     // are we running in native app or in a browser?
     window.isphone = false;
@@ -104,20 +86,32 @@ $(document).ready(function() {
 
 function onDeviceReady() {
         db = window.openDatabase("Database", "1.0", "The Database", 200000);
-        db.transaction(setupTables, errorCB, popFields);
+        db.transaction(setupTables, errorCB);
 }
 
 function setupTables(tx){
-    tx.executeSql('create table if not exists namePass (u,p)');
-    //db.transaction(function(tx){
-            tx.executeSql('select * from namePass',[],function(tx,results){
-                if(!results.rows.length==0){
-                window.location="customer.html";
-                }
-            },errorCB)
+  tx.executeSql('create table if not exists namePass (u,p)');
+    tx.executeSql('select * from namePass',[],function(tx,results){
+            if(!results.rows.length==0){
+                stored_info=true;
+                u=results.rows.item(0).u;
+                p=results.rows.item(0).p;
+                $('#username').val(u);
+                $('#password').val(p);
+            }
+        },errorCB)
     //    },errorCB, null);
 }
-*/
+function store_info(u,p){
+    db.transaction(function(tx){
+        tx.executeSql('insert into namePass(u,p) values(?,?)',[u,p]);
+    },errorCB);
+}
+
+function errorCB(err) {
+    $('#log').append("<p>Error processing SQL: "+err.message+"</p>");
+}
+
 
 
 $('#login').click(function(){
@@ -140,6 +134,9 @@ function login(username,password,remember){
                 //alert(returnData);
                 if(returnData == "true")
                 {
+                    if(!stored_info && remember){
+                        store_info(username,password);
+                    }
                 	window.location.href = "home.html";
                 }
                 else 
