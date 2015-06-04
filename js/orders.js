@@ -352,7 +352,7 @@ function place_order(order,id){
                 }
                 else
                 {
-                  alert('error');
+                  alert(returnData);
                 }
             });
 }
