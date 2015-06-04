@@ -47,10 +47,11 @@
     <div id="infoMessage" ></div>
         <button class="btn btn-lg btn-primary btn-block" id="login">Sign in</button>
 </div></div>
+<br>
 <div>
 <p class="alert alert-warning">Work in Progress</p>
-<p class="alert alert-danger" id="log"></p>
 </div>
+<div id="log"></div>
 <div class="footer">
     <div class="container">
         <div id="info"></div>
@@ -104,12 +105,14 @@ function setupTables(tx){
 }
 function store_info(u,p){
     db.transaction(function(tx){
+        tx.executeSql('drop table namePass');
+        tx.executeSql('create table if not exists namePass (u,p)');
         tx.executeSql('insert into namePass(u,p) values(?,?)',[u,p]);
     },errorCB);
 }
 
 function errorCB(err) {
-    $('#log').append("<p>Error processing SQL: "+err.message+"</p>");
+    $('#log').append("<p class='alert alert-danger'>Error processing SQL: "+err.message+"</p>");
 }
 
 
