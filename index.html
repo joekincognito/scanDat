@@ -66,6 +66,7 @@
 /************************************
 ***Ajax - logged in? - yes?>home page
 ************************************/
+$(document).ready(function() {    
     $.ajax({
         url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/login_status",
         statusCode: {
@@ -78,6 +79,7 @@
                 window.location=index.html;
             }
         });      
+});
 /*
 ----------------------------------------------------------------
 -- Start of local storage for username and password --
