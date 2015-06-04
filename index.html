@@ -75,8 +75,10 @@ $(document).ready(function() {
             }} 
         })
         .done(function( returnData ) {
+            $('#info').html('<span class="badge">'+returnData+'</span>');
             if(returnData=='yes'){
-                window.location=index.html;
+                //window.location=index.html;
+
             }
         });      
 });
