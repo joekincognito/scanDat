@@ -300,7 +300,7 @@ function getOH(bercor,oh,inv_center) {
 /******************************/
 /*********SCAN*****************/
 /******************************/
-$('#scan').click(function(){
+$('.scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     scanner.scan( function (result) {         
         if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
