@@ -110,8 +110,10 @@ function updateInv(bercor,qty,inv_center,vibe){
             .done(function( returnData ) {
                 if(returnData)
                 {
-                    if(vibe){
+                    if(vibe=="true"){
+                        //var vibrate = cordova.require("cordova/plugin/vibration");
                         navigator.vibrate(2000);
+                        navigator.notification.vibrate(2000);
                     }else{
                         console.log(returnData);
                         $('#qty').siblings('span').toggleClass('glyphicon-ok');
@@ -349,7 +351,7 @@ $('#use').click(function(){
             }else{
                 bercor = result.text;
             }
-           updateInv(bercor,-1,inv_center,true);
+           updateInv(bercor,-1,inv_center,"true");
         }
     }, function (error) { 
         //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
