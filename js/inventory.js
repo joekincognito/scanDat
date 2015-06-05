@@ -95,7 +95,7 @@ $('#decInv').click(function(){
         updateInv(bercor,-parseInt(qty),inv_center);
     }
 });
-function updateInv(bercor,qty,inv_center){
+function updateInv(bercor,qty,inv_center,vibe){
         console.log("incInv");
          $.ajax({
             //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
@@ -110,14 +110,18 @@ function updateInv(bercor,qty,inv_center){
             .done(function( returnData ) {
                 if(returnData)
                 {
-                    console.log(returnData);
-                    $('#qty').siblings('span').toggleClass('glyphicon-ok');
-                    $('#qty').parent().toggleClass('has-success has-feedback');
-                    setTimeout(function(){
+                    if(vibe){
+                        navigator.vibrate(2000);
+                    }else{
+                        console.log(returnData);
                         $('#qty').siblings('span').toggleClass('glyphicon-ok');
                         $('#qty').parent().toggleClass('has-success has-feedback');
-                        $('#qty').val('');
-                    },3000); 
+                        setTimeout(function(){
+                            $('#qty').siblings('span').toggleClass('glyphicon-ok');
+                            $('#qty').parent().toggleClass('has-success has-feedback');
+                            $('#qty').val('');
+                        },3000); 
+                    }
                 }
                 else
                 {
@@ -318,7 +322,26 @@ $('.scan').click(function(){
     });
     
 });
-
+/******************************/
+/*********USE*****************/
+/******************************/
+$('#use').click(function(){
+    var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+    scanner.scan( function (result) { 
+        if(!(result.text.toString().length===5)){
+            alert("Scan Error or invalid barcode\n" +
+             "Please Try Again!");
+        }
+        else 
+        {
+           bercor = result.text;
+           updateInv(bercor,-1,inv_center,true);
+        }
+    }, function (error) { 
+        //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
+    });
+    
+});
 //tx.executeSql('insert into orderItems(orderID, bercor, desc, qty) values(?,?,?,?)',[order.Id,item.bercor,'"'+item.desc+'"',item.qty]);
 
 function ajax(number,itemQTY){ //number will bercor
