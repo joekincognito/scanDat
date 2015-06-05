@@ -300,41 +300,54 @@ function getOH(bercor,oh,inv_center) {
 /******************************/
 /*********SCAN*****************/
 /******************************/
-$('.scan').click(function(){
+$('#scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    //thisBercor = $(this).parent().parent().find('.bercor');
-    scanner.scan( function (result) { 
-
-       /*$('#log').append("Scanner result: \n" +
-            "text: " + result.text + "\n");*/
-        //$('#log').append(result);
-        
-        if(!(result.text.toString().length===5)){
-            alert("Scan Error or invalid barcode\n" +
-             "Please Try Again!");
+    scanner.scan( function (result) {         
+        if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
+            navigator.notification.alert(
+              "Scan Error or Invalid Barcode\n"+
+              "Please Try Again!", //message
+              function(){window.location="home.html"}, //callback
+              'Scan Error',   //Title
+              'OK'                //buttonName
+          );
         }
         else 
         {
-            $('.bercor').val(result.text);
+            if(result.text.toString().length===12){
+                number=result.text.substring(6,11);
+                 $('.bercor').val(number);
+            }
+            else{
+                $('.bercor').val(result.text);
+            }
         }
     }, function (error) { 
         //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
     });
-    
-});
 /******************************/
 /*********USE*****************/
 /******************************/
 $('#use').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    scanner.scan( function (result) { 
-        if(!(result.text.toString().length===5)){
-            alert("Scan Error or invalid barcode\n" +
-             "Please Try Again!");
+    scanner.scan( function (result) {         
+        if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
+            navigator.notification.alert(
+              "Scan Error or Invalid Barcode\n"+
+              "Please Try Again!", //message
+              function(){window.location="home.html"}, //callback
+              'Scan Error',   //Title
+              'OK'                //buttonName
+          );
         }
         else 
         {
-           bercor = result.text;
+            if(result.text.toString().length===12){
+                number=result.text.substring(6,11);
+                 bercor = number;
+            }else{
+                bercor = result.text;
+            }
            updateInv(bercor,-1,inv_center,true);
         }
     }, function (error) { 

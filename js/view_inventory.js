@@ -1,4 +1,4 @@
-var tableShell = '<table class="table table-bordered table-striped" style="font-size:16px"><thead><tr><th>Bercor</th><th>OH</th><th>Min</th><th>Max</th></tr></thead><tbody></tbody></table> ';
+var tableShell = '<table class="table table-bordered table-striped" style="font-size:16px"><thead><tr><th>Bercor</th><th>Desc</th><th>OH</th><th>Min</th><th>Max</th></tr></thead><tbody></tbody></table> ';
 $(document).ready(function() {
     // are we running in native app or in a browser?
     window.isphone = false;
@@ -44,7 +44,7 @@ $.each( results, function( index, item ){
     $('.tab-content').append('<div role="tabpanel" class="tab-pane" id="'+tableID+'"></div>');
     $('#'+tableID).append(tableShell);
     $.each( item, function( k, v ){
-        $('#'+tableID+' table tbody').append('<tr><td>'+v.bercor+'</td><td>'+v.onHand+'</td><td>'+v.min+'</td><td>'+v.max+'</td></tr>');
+        $('#'+tableID+' table tbody').append('<tr><td>'+v.bercor+'</td><td>'+v.desc+'</td><td>'+v.onHand+'</td><td>'+v.min+'</td><td>'+v.max+'</td></tr>');
     });
 $(".nav-tabs li:first-child").addClass('active');
 $(".tab-pane:first-child").addClass('active');
