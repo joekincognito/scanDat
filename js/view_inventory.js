@@ -1,4 +1,4 @@
-var tableShell = '<table class="table table-bordered table-striped" style="font-size:16px"><thead><tr><th>Bercor</th><th>Desc</th><th>OH</th><th>Min</th><th>Max</th></tr></thead><tbody></tbody></table> ';
+var tableShell = '<table class="table table-condensed table-bordered table-striped" style="font-size:16px"><thead><tr><th>Bercor</th><th>Desc</th><th>OH</th><th>Min</th><th>Max</th></tr></thead><tbody></tbody></table> ';
 $(document).ready(function() {
     // are we running in native app or in a browser?
     window.isphone = false;
@@ -12,7 +12,33 @@ $(document).ready(function() {
         onDeviceReady();
     }
 });
-function onDeviceReady(){  getInventory();  }
+function onDeviceReady(){  
+    getUser();  
+}
+function getUser(){
+  $.ajax({
+    url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_user",
+    statusCode: {
+        404: function() {
+        alert( "page not found" );
+        }} 
+    })
+    .done(function( result ) {
+        if(result)
+        {
+            result = JSON.parse(result);                  
+            role = parseInt(result.role);
+            if(role>2)$('.role-based').prop("disabled", true);
+            user = result; 
+            $('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
+             getInventory();
+        }
+        else
+        {
+            alert("An Error has occurred");
+        }
+});  
+}
 function getInventory(){
   $.ajax({
             //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
@@ -24,7 +50,7 @@ function getInventory(){
                 }} 
             })
             .done(function( result ) {
-                console.log("returnData is: " + result);
+                //console.log("returnData is: " + result);
                 if(result)
                 {
                     result = JSON.parse(result);                  

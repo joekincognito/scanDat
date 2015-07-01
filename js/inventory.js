@@ -7,7 +7,7 @@ var min;//global scoped min field
 var max;//global scoped max field
 var item = {};
 var inv_center;
-
+var user = {};
 $(document).ready(function() {
     // are we running in native app or in a browser?
     window.isphone = false;
@@ -25,7 +25,31 @@ $('#iCenter').change(function(){
     inv_center = $('#iCenter option:selected').prop('id');
 });
 function onDeviceReady() {
-  getInventoryCenters();
+  getUser();
+}
+function getUser(){
+  $.ajax({
+    url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_user",
+    statusCode: {
+        404: function() {
+        alert( "page not found" );
+        }} 
+    })
+    .done(function( result ) {
+        if(result)
+        {
+            result = JSON.parse(result);                  
+            role = parseInt(result.role);
+            if(role>2)$('.role-based').prop("disabled", true);
+            user = result; 
+            $('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
+             getInventoryCenters();
+        }
+        else
+        {
+            alert("An Error has occurred");
+        }
+});  
 }
 function getInventoryCenters(){
   $.ajax({
@@ -38,7 +62,7 @@ function getInventoryCenters(){
                 }} 
             })
             .done(function( result ) {
-                console.log("returnData is: " + result);
+                //console.log("returnData is: " + result);
                 if(result)
                 {
                     result = JSON.parse(result);                  
@@ -95,7 +119,7 @@ $('#decInv').click(function(){
         updateInv(bercor,-parseInt(qty),inv_center);
     }
 });
-function updateInv(bercor,qty,inv_center,vibe){
+function updateInv(bercor,qty,inv_center){
         console.log("incInv");
          $.ajax({
             //url: "http://50.204.18.115/apps/BarcodeDemo/php/test.php", //real url - public
@@ -110,20 +134,14 @@ function updateInv(bercor,qty,inv_center,vibe){
             .done(function( returnData ) {
                 if(returnData)
                 {
-                    if(vibe=="true"){
-                        //var vibrate = cordova.require("cordova/plugin/vibration");
-                        navigator.vibrate(2000);
-                        navigator.notification.vibrate(2000);
-                    }else{
-                        console.log(returnData);
+                    console.log(returnData);
+                    $('#qty').siblings('span').toggleClass('glyphicon-ok');
+                    $('#qty').parent().toggleClass('has-success has-feedback');
+                    setTimeout(function(){
                         $('#qty').siblings('span').toggleClass('glyphicon-ok');
                         $('#qty').parent().toggleClass('has-success has-feedback');
-                        setTimeout(function(){
-                            $('#qty').siblings('span').toggleClass('glyphicon-ok');
-                            $('#qty').parent().toggleClass('has-success has-feedback');
-                            $('#qty').val('');
-                        },3000); 
-                    }
+                        $('#qty').val('');
+                    },3000); 
                 }
                 else
                 {
@@ -304,60 +322,27 @@ function getOH(bercor,oh,inv_center) {
 /******************************/
 $('.scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    scanner.scan( function (result) {         
-        if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
-            navigator.notification.alert(
-              "Scan Error or Invalid Barcode\n"+
-              "Please Try Again!", //message
-              function(){window.location="home.html"}, //callback
-              'Scan Error',   //Title
-              'OK'                //buttonName
-          );
+    //thisBercor = $(this).parent().parent().find('.bercor');
+    scanner.scan( function (result) { 
+
+       /*$('#log').append("Scanner result: \n" +
+            "text: " + result.text + "\n");*/
+        //$('#log').append(result);
+        
+        if(!(result.text.toString().length===5)){
+            alert("Scan Error or invalid barcode\n" +
+             "Please Try Again!");
         }
         else 
         {
-            if(result.text.toString().length===12){
-                number=result.text.substring(6,11);
-                 $('.bercor').val(number);
-            }
-            else{
-                $('.bercor').val(result.text);
-            }
-        }
-    }, function (error) { 
-        //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
-    });
-});
-/******************************/
-/*********USE*****************/
-/******************************/
-$('#use').click(function(){
-    var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    scanner.scan( function (result) {         
-        if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
-            navigator.notification.alert(
-              "Scan Error or Invalid Barcode\n"+
-              "Please Try Again!", //message
-              function(){window.location="home.html"}, //callback
-              'Scan Error',   //Title
-              'OK'                //buttonName
-          );
-        }
-        else 
-        {
-            if(result.text.toString().length===12){
-                number=result.text.substring(6,11);
-                 bercor = number;
-            }else{
-                bercor = result.text;
-            }
-           updateInv(bercor,-1,inv_center,"true");
+            $('.bercor').val(result.text);
         }
     }, function (error) { 
         //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
     });
     
 });
+
 //tx.executeSql('insert into orderItems(orderID, bercor, desc, qty) values(?,?,?,?)',[order.Id,item.bercor,'"'+item.desc+'"',item.qty]);
 
 function ajax(number,itemQTY){ //number will bercor

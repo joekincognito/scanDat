@@ -35,7 +35,8 @@ function getUser(){
             result = JSON.parse(result);                  
             role = parseInt(result.role);
             if(role>2)$('.role-based').prop("disabled", true);
-            user = result;
+            user = result; 
+            $('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
              getOrder();
         }
         else
@@ -87,7 +88,15 @@ var panelShell = ' <div  class="panel panel-primary">'+
                       '<button id="update" class="btn btn-primary">Update Order</button>'+
                     '</div>'+
                     '<div class="col-md-4">'+
-                      '<button id="placeOrder" class="btn btn-success role-based center-block">Place Order</button>'+
+                      '<div class="btn-group center-block">'+
+  '<button type="button" class="btn btn-success dropdown-toggle role-based" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
+    'Place Order <span class="caret"></span>'+
+  '</button>'+
+  '<ul class="dropdown-menu">'+
+    '<li><a href="#" id="delivery">Delivery</a></li>'+
+    '<li><a href="#" id="pickup">Pickup</a></li>'+
+  '</ul>'+
+'</div>'+
                     '</div>'+
                     '<div class="col-md-4">'+
                       '<button id="deleteOrder" class="btn btn-danger role-based pull-right">Delete Order</button>'+
@@ -261,13 +270,26 @@ $('.tab-content').on("click","#deleteOrder", function(){
   delete_order(id);
 });
 //Place Order Button Click
-$('.tab-content').on("click",'#placeOrder',function(){
+$('.tab-content').on("click",'#delivery',function(){
     if(($('.changed').length > 0) || ($('#po').hasClass("poChanged"))){$('#update').click()}
     $('#placeOrder').prop('disabled', true);
     $('.panel-footer').append('<br><span class="alert alert-info">Order Processing Please Wait</span>');
     id = $(this).parents('.order').data("orderId");
-    prepare_order(id);
+    info='{"deliveryMethod":"delivery"}';
+    prepare_order(id,info);
 });
+
+$('.tab-content').on("click",'#pickup',function(){
+    if(($('.changed').length > 0) || ($('#po').hasClass("poChanged"))){$('#update').click()}
+    $('#placeOrder').prop('disabled', true);
+    $('.panel-footer').append('<br><span class="alert alert-info">Order Processing Please Wait</span>');
+    id = $(this).parents('.order').data("orderId");
+    person = user.first_name+' '+user.last_name;
+    info='{"deliveryMethod":"pickup", "person":"'+person+'"}';
+    //console.log(info);
+    prepare_order(id,info);
+});
+
 function delete_order(id){
   $.ajax({
     url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/delete_order",
@@ -318,7 +340,7 @@ function update_po(id, po, index) {
             });  
           };
 
-function prepare_order(id){
+function prepare_order(id,info){
     $.ajax({
         url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/prepare_order",
         data: "id=" + id,
@@ -329,18 +351,27 @@ function prepare_order(id){
         })
     .done(function( returnData ) {
         if(returnData){
-            place_order(returnData,id);
+            place_order(returnData,id,info);
+            //console.log(info);
         }
         else{
         }
     });
 }
-function place_order(order,id){ 
+function place_order(order,id,info){ 
+    ordercheck=$.parseJSON(order);
+    custID = ordercheck.CustID;
+    //console.log(info);return;
+    if(custID==2501){
+      url = "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php";
+    }else{
+      url= "http://50.204.18.115/apps/BarcodeDemo/php/order.php";
+    }
     $.ajax({
-            url: "http://50.204.18.115/apps/BarcodeDemo/php/order.php",
+            url: url,
             //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
             crossDomain: true,
-            data: "qs=" + order,
+            data: "qs=" + order + "&info=" + info,
             statusCode: {
                 404: function() {
                 alert( "page not found" );
@@ -377,6 +408,7 @@ function order_success_callback(){
         }
         else{
           alert('The Order Has Been Submitted');
+          window.location="index";
         }
       }
       else

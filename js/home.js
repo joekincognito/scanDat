@@ -1,11 +1,56 @@
 var order = {};
 var item = {};
 var customer = {};
+var user = {};
+ 
+var phone = false;
+$(document).ready(function() {
+    // are we running in native app or in a browser?
+    window.isphone = false;
+    if(document.URL.indexOf("http://") === -1 
+        && document.URL.indexOf("https://") === -1) {
+        window.isphone = true;
+        phone = true;
+    }
+    if( window.isphone ) {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } else {
+        onDeviceReady();
+    }
+});
+function onDeviceReady() {  
+  getUser(); //will disable the place order button if the users group is 4
+ 
+}
+function getUser(){
+  $.ajax({
+    url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_user",
+    statusCode: {
+        404: function() {
+        alert( "page not found" );
+        }} 
+    })
+    .done(function( result ) {
+        if(result)
+        {
+            result = JSON.parse(result);                  
+            role = parseInt(result.role);
+            if(role>2)$('.role-based').prop("disabled", true);
+            user = result; 
+            $('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
+        }
+        else
+        {
+            alert("An Error has occurred");
+        }
+});  
+}
 
-  $('#addToOrder').click(function(){
+
+$('#addToOrder').click(function(){
     item.bercor=$('#item').val();
     item.qty=parseInt($('#qty').val());
-    console.log(item);
+    //console.log(item);
     if(!item.desc){
         ajax(item.bercor);
         setTimeout(function()
@@ -24,27 +69,17 @@ var customer = {};
         addToOrder(item);      
     }
 });
+
 $('#scan').click(function(){
     var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     scanner.scan( function (result) {         
-        if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
-            navigator.notification.alert(
-              "Scan Error or Invalid Barcode\n"+
-              "Please Try Again!", //message
-              function(){window.location="home.html"}, //callback
-              'Scan Error',   //Title
-              'OK'                //buttonName
-          );
+        if(!(result.text.toString().length===5 || result.text.toString().length===6)){
+            alert("Scan Error or invalid barcode\n" +
+             "Please Try Again!");
         }
         else 
         {
-            if(result.text.toString().length===12){
-                number=result.text.substring(6,11);
-                ajax(number,null);
-            }
-            else{
-                ajax(result.text,null);
-            }
+            ajax(result.text,null);
         }
     }, function (error) { 
         //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
@@ -52,7 +87,7 @@ $('#scan').click(function(){
     
 });
 function ajax(number){ //number will bercor
-        console.log("ajax");
+        //console.log("ajax");
         $.ajax({
             url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_item",
             data: "qs=" + number,
@@ -62,16 +97,16 @@ function ajax(number){ //number will bercor
                 }} 
             })
             .done(function( returnData ) {
-                console.log('ajax.done');
-                console.log(returnData);
+                //console.log('ajax.done');
+                //console.log(returnData);
                 item = jQuery.parseJSON( returnData );
-                console.log(item);
+                //console.log(item);
                 $('#info').html("<p class='alert alert-info msg'>" + item.desc + "</p>" );
                 $('#item').val( item.bercor);
             });      
 }
 function addToOrder(item) {
-        console.log("addToOrder");
+        //console.log("addToOrder");
          $.ajax({
             url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/add_item_to_order",
             data: item,

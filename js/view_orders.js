@@ -22,9 +22,32 @@ $(document).ready(function() {
 
 
 function onDeviceReady() {
-    getOrders();
+    getUser();
 }
-
+function getUser(){
+  $.ajax({
+    url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_user",
+    statusCode: {
+        404: function() {
+        alert( "page not found" );
+        }} 
+    })
+    .done(function( result ) {
+        if(result)
+        {
+            result = JSON.parse(result);                  
+            role = parseInt(result.role);
+            if(role>2)$('.role-based').prop("disabled", true);
+            user = result; 
+            $('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
+             getOrders();
+        }
+        else
+        {
+            alert("An Error has occurred");
+        }
+});  
+}
 function getOrders() {
         $.ajax({
             url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_orders_as_json",
@@ -34,7 +57,7 @@ function getOrders() {
                 }} 
             })
             .done(function( result ) {
-                console.log("returnData is: " + result);
+                //console.log("returnData is: " + result);
                 if(result)
                 {
                     result = JSON.parse(result);                  
