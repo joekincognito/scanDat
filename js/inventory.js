@@ -343,6 +343,37 @@ $('.scan').click(function(){
     
 });
 
+/******************************/
+/*********USE*****************/
+/******************************/
+$('#use').click(function(){
+    var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+    scanner.scan( function (result) {         
+        if(!(result.text.toString().length===5 || result.text.toString().length===6 || result.text.toString().length===12)){
+            navigator.notification.alert(
+              "Scan Error or Invalid Barcode\n"+
+              "Please Try Again!", //message
+              function(){window.location="home.html"}, //callback
+              'Scan Error',   //Title
+              'OK'                //buttonName
+          );
+       }
+         else 
+         {
+            if(result.text.toString().length===12){
+                number=result.text.substring(6,11);
+                 bercor = number;
+            }else{
+                bercor = result.text;
+            }
+           updateInv(bercor,-1,inv_center,"true");
+       }
+     }, function (error) { 
+         //$('#log').append("<p>Scanning failed: " + error + "</p>"); 
+     });
+     
+ });
+
 //tx.executeSql('insert into orderItems(orderID, bercor, desc, qty) values(?,?,?,?)',[order.Id,item.bercor,'"'+item.desc+'"',item.qty]);
 
 function ajax(number,itemQTY){ //number will bercor
