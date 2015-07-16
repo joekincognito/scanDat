@@ -65,7 +65,7 @@ function getInventory(){
 function getInventorySuccess(results) {
     var active=true;
 $.each( results, function( index, item ){
-    tableID=index.replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+    tableID=index.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
     $('.nav-tabs').append('<li role="presentation"><a href="#'+tableID+'" aria controls="'+tableID+'" role="tab" data-toggle="tab">'+index+'</a></li>');
     $('.tab-content').append('<div role="tabpanel" class="tab-pane" id="'+tableID+'"></div>');
     $('#'+tableID).append(tableShell);
