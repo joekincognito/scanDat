@@ -113,7 +113,7 @@ function getOrdersSuccess(results) {
       //FOR EACH ORDER
       $.each( results, function( index, order ){
         name = order.name;
-        tableID = name.replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+        tableID = name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase();
         tableID += String(order.id);
         orderID = order.id;
         create_nav_tab(tableID,name);
