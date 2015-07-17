@@ -1,3 +1,7 @@
+$('.tab-content').on("click",'select',function(){
+  $(this).focus();
+});
+
 var order = {};
 var item = {};
 var customer = {};
