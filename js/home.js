@@ -71,8 +71,8 @@ $('#addToOrder').click(function(){
 });
 
 $('#scan').click(function(){
-    var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    scanner.scan( function (result) {         
+    //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+    cordova.plugins.barcodeScanner.scan( function (result) {         
         if(!(result.text.toString().length===5 || result.text.toString().length===6)){
             alert("Scan Error or invalid barcode\n" +
              "Please Try Again!");
