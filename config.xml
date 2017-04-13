@@ -45,16 +45,16 @@
     <icon src="icon-60@2x.png" platform="ios" width="120" height="120" />
 
     <!-- iPad -->
-    <icon src="icon-76.png" platform="ios" width="76" height="76" />
-    <icon src="icon-76@2x.png" platform="ios" width="152" height="152" />
+    <icon src="res/icon/ios/icon-76.png" platform="ios" width="76" height="76" />
+    <icon src="res/icon/ios/icon-76@2x.png" platform="ios" width="152" height="152" />
 
     <!-- Settings Icon -->
-    <icon src="icon-small.png" platform="ios" width="29" height="29" />
-    <icon src="icon-small@2x.png" platform="ios" width="58" height="58" />
+    <icon src="res/icon/ios/icon-small.png" platform="ios" width="29" height="29" />
+    <icon src="res/icon/ios/icon-small@2x.png" platform="ios" width="58" height="58" />
 
     <!-- Spotlight Icon -->
-    <icon src="icon-40.png" platform="ios" width="40" height="40" />
-    <icon src="icon-40@2x.png" platform="ios" width="80" height="80" />
+    <icon src="res/icon/ios/icon-40.png" platform="ios" width="40" height="40" />
+    <icon src="res/icon/ios/icon-40@2x.png" platform="ios" width="80" height="80" />
 
     <icon src="res/icon/webos/icon-64.png"          platform="webos" />
     <icon src="res/icon/windows-phone/icon-48.png"  platform="winphone" />
