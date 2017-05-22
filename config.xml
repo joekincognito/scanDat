@@ -13,7 +13,10 @@
         Joe Kelley
     </author>
 
-    <plugin name="cordova-plugin-barcodescanner" />
+    <!-- <plugin name="cordova-plugin-barcodescanner" /> -->
+    <!-- <plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner.git" /> -->
+    <plugin name="phonegap-plugin-barcodescanner" />
+    
 
     <feature name="http://api.phonegap.com/1.0/device" />
    <!--  <feature name="debug-server" required="true">
