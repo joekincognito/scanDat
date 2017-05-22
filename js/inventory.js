@@ -321,15 +321,8 @@ function getOH(bercor,oh,inv_center) {
 /*********SCAN*****************/
 /******************************/
 $('.scan').click(function(){
-    var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    //thisBercor = $(this).parent().parent().find('.bercor');
-    scanner.scan( function (result) { 
-
-       /*$('#log').append("Scanner result: \n" +
-            "text: " + result.text + "\n");*/
-        //$('#log').append(result);
-        
-        if(!(result.text.toString().length===5)){
+    cordova.plugins.barcodeScanner.scan( function (result) {  
+        if(!(result.text.toString().length===5 || result.text.toString().length===6)){
             alert("Scan Error or invalid barcode\n" +
              "Please Try Again!");
         }
