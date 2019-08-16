@@ -15,7 +15,7 @@
 
     <!-- <plugin name="cordova-plugin-barcodescanner" /> -->
     <!-- <plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner.git" /> -->
-    <plugin name="phonegap-plugin-barcodescanner" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="6.0.6" />
     
 
     <feature name="http://api.phonegap.com/1.0/device" />
