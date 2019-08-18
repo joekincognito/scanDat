@@ -150,7 +150,7 @@ function login(username,password,remember){
             });      
 }
 function isConsignmentCustomer(){
-    return getUserRole == 6;
+    return getUserRole() === 6;
 }
 function getUserRole(){
   $.ajax({
@@ -165,13 +165,14 @@ function getUserRole(){
         {
             result = JSON.parse(result);                  
             role = parseInt(result.role);
-            return role;
         }
         else
         {
             alert("An Error has occurred");
         }
     });
+
+    return role;
 }
 </script>
 
