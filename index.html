@@ -137,13 +137,41 @@ function login(username,password,remember){
                     if(!stored_info && remember){
                         store_info(username,password);
                     }
-                	window.location.href = "home.html";
+                    if(isConsignmentCustomer){
+                        window.location.href="consignment.html";
+                    }else{ 
+                	   window.location.href = "home.html";
+                    }
                 }
                 else 
                 {
                     $('#infoMessage').html('<div class="container bg-danger"><h5 class="text-danger">Login failed, try again</h5></div>');
                 }    
             });      
+}
+function isConsignmentCustomer(){
+    return getUserRole == 6;
+}
+function getUserRole(){
+  $.ajax({
+    url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_user",
+    statusCode: {
+        404: function() {
+        alert( "page not found" );
+        }}
+    })
+    .done(function( result ) {
+        if(result)
+        {
+            result = JSON.parse(result);                  
+            role = parseInt(result.role);
+            return role;
+        }
+        else
+        {
+            alert("An Error has occurred");
+        }
+    });
 }
 </script>
 
