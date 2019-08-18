@@ -1,3 +1,4 @@
+$('#info').append('<p>consignment.js loaded</p>');
 $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     cordova.plugins.barcodeScanner.scan( function (result) {         
