@@ -28,7 +28,7 @@ $('#scan').click(function(){
             //ajax(result.text,null);
             //$('#item').val( result.text);
             $('#info').append("<p>Scan Result " + result.text + "</p>"); 
-        }
+        //}
     }, function (error) { 
         $('#info').append("<p>Scanning failed: " + error + "</p>"); 
     });
