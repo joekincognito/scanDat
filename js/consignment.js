@@ -1,4 +1,7 @@
+var customer = {};
+var user = {};
 var phone = false;
+
 $(document).ready(function() {
     // are we running in native app or in a browser?
     window.isphone = false;
@@ -14,8 +17,32 @@ $(document).ready(function() {
     }
 });
 function onDeviceReady() {  
-  $('#info').append('<p>consignment.js loaded</p>');
+  getUser();//Not doing anything at the moment
 }
+
+function getUser(){
+  $.ajax({
+    url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_user",
+    statusCode: {
+        404: function() {
+        alert( "page not found" );
+        }} 
+    })
+    .done(function( result ) {
+        if(result)
+        {
+            result = JSON.parse(result);                  
+            role = parseInt(result.role);
+            user = result; 
+            //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
+        }
+        else
+        {
+            alert("An Error has occurred");
+        }
+});  
+}
+
 $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     cordova.plugins.barcodeScanner.scan( function (result) {         
