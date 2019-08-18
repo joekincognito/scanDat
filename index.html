@@ -137,7 +137,7 @@ function login(username,password,remember){
                     if(!stored_info && remember){
                         store_info(username,password);
                     }
-                    if(isConsignmentCustomer){
+                    if(isConsignmentCustomer==true){
                         window.location.href="consignment.html";
                     }else{ 
                 	   window.location.href = "home.html";
