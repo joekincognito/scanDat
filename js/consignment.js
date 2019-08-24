@@ -52,12 +52,42 @@ $('#scan').click(function(){
         // }
         // else 
         // {
-            //ajax(result.text,null);
-            //$('#item').val( result.text);
-            $('#info').append("<p>Scan Result " + result.text + "</p>"); 
+            //customer_number = user.customer_number; 
+            serial_number = result.text;
+
+            if(hasSerialNumberMatch(serial_number)){
+                $('#info').append("<p>Scan Successfull: " + result.text + "</p>");
+            }else{
+                $('#info').append("<p>Serial Number Error, Please try again</p>");
+            }
+                
+            
         //}
     }, function (error) { 
         $('#info').append("<p>Scanning failed: " + error + "</p>"); 
     });
     
 });
+
+function hasSerialNumberMatch(serial_number) {
+    //customer_number   serial_number   po_number  
+    //console.log(info);return;
+    // if(custID==2501){
+    //   url = "http://10.1.1.1:10080/apps/BarcodeDemo/php/consignment.php";
+    // }else{
+      url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
+    //}
+    $.ajax({
+            url: url,
+            //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
+            crossDomain: true,
+            data: "customer_number=" + "2501" + "&serial_number=" + info,
+            statusCode: {
+                404: function() {
+                alert( "page not found" );
+                }} 
+            })
+            .done(function( returnData ) {
+                return returnData == "Success";
+            });
+}
