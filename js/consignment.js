@@ -81,7 +81,7 @@ function hasSerialNumberMatch(serial_number) {
             url: url,
             //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
             crossDomain: true,
-            data: "customer_number=" + "2501" + "&serial_number=" + info,
+            data: "customer_number=" + "2501" + "&serial_number=" + serial_number,
             statusCode: {
                 404: function() {
                 alert( "page not found" );
