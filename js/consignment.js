@@ -55,12 +55,12 @@ $('#scan').click(function(){
             //customer_number = user.customer_number; 
             serial_number = result.text;
 
-            if(hasSerialNumberMatch(serial_number)){
+            serial_number_match = hasSerialNumberMatch(serial_number)
+            if(serial_number_match=="Success"){
                 $('#info').append("<p>Scan Successfull: " + result.text + "</p>");
             }else{
-                $('#info').append("<p>Serial Number Error, Please try again</p>");
+                $('#info').append("<p>Serial Number Error, Please try again <br>  " + serial_number_match + " </p>");
             }
-                
             
         //}
     }, function (error) { 
@@ -88,6 +88,6 @@ function hasSerialNumberMatch(serial_number) {
                 }} 
             })
             .done(function( returnData ) {
-                return returnData == "Success";
+                return returnData;
             });
 }
