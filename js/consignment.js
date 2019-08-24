@@ -59,7 +59,7 @@ $('#scan').click(function(){
             if(serial_number_match=="Success"){
                 $('#info').append("<p>Scan Successfull: " + result.text + "</p>");
             }else{
-                $('#info').append("<p>Serial Number Error, Please try again <br>  " + serial_number_match + " </p>");
+                $('#info').append("<p>Serial Number Error, Serial Number: " + result.text + "<br>" + serial_number_match + " </p>");
             }
             
         //}
