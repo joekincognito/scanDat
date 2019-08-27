@@ -55,15 +55,12 @@ $('#scan').click(function(){
             //customer_number = user.customer_number; 
             serial_number = result.text;
 
-            // BYPASS
-            serial_number_match="Success";
-            //serial_number_match = hasSerialNumberMatch(serial_number)
-            if(serial_number_match=="Success"){
-                $('#item').val(result.text);
-                $('#info').append("<p class='alert alert-success msg'>Scan Successfull! Item has been marked as sold.</p>");
-            }else{
-                $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + "<br>" + serial_number_match + " </p>");
-            }
+            //serial_number_match = hasSerialNumberMatch(serial_number);
+            //if(serial_number_match=="Success"){
+                $('#info').append("<p>Scan Successfull: " + result.text + "</p>");
+            //}else{
+            //    $('#info').append("<p>Serial Number Error, Serial Number: " + result.text + "<br>" + serial_number_match + " </p>");
+            //}
             
         //}
     }, function (error) { 
