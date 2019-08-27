@@ -57,9 +57,10 @@ $('#scan').click(function(){
 
             serial_number_match = hasSerialNumberMatch(serial_number)
             if(serial_number_match=="Success"){
-                $('#info').append("<p>Scan Successfull: " + result.text + "</p>");
+                $('#item').val(result.text);
+                $('#info').append("<p class='alert alert-success msg'>Scan Successfull! Item has been marked as sold.</p>");
             }else{
-                $('#info').append("<p>Serial Number Error, Serial Number: " + result.text + "<br>" + serial_number_match + " </p>");
+                $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + "<br>" + serial_number_match + " </p>");
             }
             
         //}
