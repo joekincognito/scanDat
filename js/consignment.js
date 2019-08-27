@@ -55,7 +55,9 @@ $('#scan').click(function(){
             //customer_number = user.customer_number; 
             serial_number = result.text;
 
-            serial_number_match = hasSerialNumberMatch(serial_number)
+            // BYPASS
+            serial_number_match="Success";
+            //serial_number_match = hasSerialNumberMatch(serial_number)
             if(serial_number_match=="Success"){
                 $('#item').val(result.text);
                 $('#info').append("<p class='alert alert-success msg'>Scan Successfull! Item has been marked as sold.</p>");
