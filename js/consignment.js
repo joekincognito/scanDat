@@ -53,7 +53,7 @@ $('#scan').click(function(){
         // else 
         // {
             //customer_number = user.customer_number; 
-            serial_number = result.text;
+            //serial_number = result.text;
 
             //serial_number_match = hasSerialNumberMatch(serial_number);
             //if(serial_number_match=="Success"){
@@ -81,8 +81,8 @@ function hasSerialNumberMatch(serial_number) {
             url: url,
             //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
             crossDomain: true,
-            username: 'ScanAppFloorPlanAccount';
-            password: 'WordPassIsNotaGoodPassword!';
+            //username: 'ScanAppFloorPlanAccount';
+            //password: 'WordPassIsNotaGoodPassword!';
             data: "customer_number=" + "2501" + "&serial_number=" + serial_number,
             statusCode: {
                 404: function() {
