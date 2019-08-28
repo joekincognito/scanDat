@@ -34,7 +34,6 @@ function getUser(){
             result = JSON.parse(result);                  
             role = parseInt(result.role);
             user = result;
-             $('#info').append(user);
             //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
         }
         else
