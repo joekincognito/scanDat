@@ -33,7 +33,8 @@ function getUser(){
         {
             result = JSON.parse(result);                  
             role = parseInt(result.role);
-            user = result; 
+            user = result;
+             $('#info').append(user);
             //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
         }
         else
@@ -45,24 +46,16 @@ function getUser(){
 
 $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    cordova.plugins.barcodeScanner.scan( function (result) {         
-        // if(!(result.text.toString().length===5 || result.text.toString().length===6)){
-        //     alert("Scan Error or invalid barcode\n" +
-        //      "Please Try Again!");
-        // }
-        // else 
-        // {
-            //customer_number = user.customer_number; 
+    cordova.plugins.barcodeScanner.scan( function (result) {                   
             serial_number = result.text;
 
-            //serial_number_match = hasSerialNumberMatch(serial_number);
-            //BYPASS
-            serial_number_match="Success";
+            serial_number_match = hasSerialNumberMatch(serial_number);
+
             if(serial_number_match=="Success"){
                 $('#item').val(serial_number);
-                $('#info').append("<p class='alert alert-success msg'>Scan Successfull: " + result.text + "</p>");
+                $('#info').append("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
             }else{
-                $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + "<br>" + serial_number_match + " </p>");
+                $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + " Please Try Again</p>");
             }
             
         //}
@@ -86,7 +79,7 @@ function hasSerialNumberMatch(serial_number) {
             crossDomain: true,
             username: 'ScanAppFloorPlanAccount',
             password: 'WordPassIsNotaGoodPassword!',
-            data: "customer_number=" + "2501" + "&serial_number=" + serial_number,
+            data: "customer_number=" + user.customer_id; + "&serial_number=" + serial_number,
             statusCode: {
                 404: function() {
                 alert( "page not found" );
