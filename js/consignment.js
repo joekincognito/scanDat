@@ -1,5 +1,4 @@
 var customer = {};
-var user = {};
 var phone = false;
 
 $(document).ready(function() {
@@ -32,7 +31,7 @@ function getUser(){
         if(result) {
             result = JSON.parse(result);                  
             role = parseInt(result.role);
-            user = result;
+            var user = result;
             //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
         }else{
             alert("An Error has occurred");
@@ -68,8 +67,8 @@ function hasSerialNumberMatch(serial_number) {
             crossDomain: true,
             //username: 'ScanAppFloorPlanAccount',
             //password: 'WordPassIsNotaGoodPassword!',
-            //data: "customer_number=" + user.customer_id; + "&serial_number=" + serial_number,
-            data: "customer_number=2501&serial_number=12345",
+            data: "customer_number=" + user.customer_id; + "&serial_number=" + serial_number,
+            //data: "customer_number=2501&serial_number=12345",
             statusCode: {
                 404: function() {
                 alert( "page not found" );
