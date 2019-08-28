@@ -17,7 +17,7 @@ $(document).ready(function() {
     }
 });
 function onDeviceReady() {  
-  getUser();//Not doing anything at the moment
+  getUser();
 }
 
 function getUser(){
@@ -29,23 +29,20 @@ function getUser(){
         }} 
     })
     .done(function( result ) {
-        if(result)
-        {
+        if(result) {
             result = JSON.parse(result);                  
             role = parseInt(result.role);
             user = result;
             //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
-        }
-        else
-        {
+        }else{
             alert("An Error has occurred");
         }
-});  
+    });
 }
 
 $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-    cordova.plugins.barcodeScanner.scan( function (result) {                   
+    cordova.plugins.barcodeScanner.scan( function (result) {
             serial_number = result.text;
 
             serial_number_match = hasSerialNumberMatch(serial_number);
@@ -57,7 +54,6 @@ $('#scan').click(function(){
                 $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + " Please Try Again</p>");
             }
             
-        //}
     }, function (error) { 
         $('#info').append("<p>Scanning failed: " + error + "</p>"); 
     });
@@ -65,24 +61,19 @@ $('#scan').click(function(){
 });
 
 function hasSerialNumberMatch(serial_number) {
-    //customer_number   serial_number   po_number  
-    //console.log(info);return;
-    // if(custID==2501){
-    //   url = "http://10.1.1.1:10080/apps/BarcodeDemo/php/consignment.php";
-    // }else{
-      url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
-    //}
+    url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
     $.ajax({
             url: url,
             //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
             crossDomain: true,
-            username: 'ScanAppFloorPlanAccount',
-            password: 'WordPassIsNotaGoodPassword!',
+            //username: 'ScanAppFloorPlanAccount',
+            //password: 'WordPassIsNotaGoodPassword!',
             data: "customer_number=" + user.customer_id; + "&serial_number=" + serial_number,
             statusCode: {
                 404: function() {
                 alert( "page not found" );
-                }} 
+                    }
+                } 
             })
             .done(function( returnData ) {
                 return returnData;
