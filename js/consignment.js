@@ -44,8 +44,10 @@ $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     cordova.plugins.barcodeScanner.scan( function (result) {
             serial_number = result.text;
+            serial_number_match = false;
             serial_number_match = hasSerialNumberMatch(serial_number);
             $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + serial_number_match + "</p>");
+            $('#info').append("<p class='alert alert-success msg'>hasSerialNumberMatch=" + hasSerialNumberMatch(serial_number) + "</p>");
             if(serial_number_match){
                 $('#item').val(serial_number);
                 $('#info').append("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
