@@ -30,8 +30,8 @@ function getUser(){
     })
     .done(function( result ) {
         if(result) {
-            result = JSON.parse(result);                  
-            role = parseInt(result.role);
+            var result = JSON.parse(result);                  
+            var role = parseInt(result.role);
             user = result;
             //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
         }else{
@@ -43,8 +43,8 @@ function getUser(){
 $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     cordova.plugins.barcodeScanner.scan( function (result) {
-            serial_number = result.text;
-            serial_number_match = false;
+            var serial_number = result.text;
+            var serial_number_match = false;
             serial_number_match = hasSerialNumberMatch(serial_number);
             $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + serial_number_match + "</p>");
             $('#info').append("<p class='alert alert-success msg'>hasSerialNumberMatch=" + hasSerialNumberMatch(serial_number) + "</p>");
