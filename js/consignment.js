@@ -77,6 +77,7 @@ function hasSerialNumberMatch(serial_number) {
                 } 
             })
             .done(function( returnData ) {
+                $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + returnData + "</p>");
                 return returnData;
             })
             .fail(function() {
