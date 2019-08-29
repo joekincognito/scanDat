@@ -33,7 +33,6 @@ function getUser(){
             result = JSON.parse(result);                  
             role = parseInt(result.role);
             user = result;
-            $('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "</p>");
             //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
         }else{
             alert("An Error has occurred");
@@ -45,9 +44,8 @@ $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     cordova.plugins.barcodeScanner.scan( function (result) {
             serial_number = result.text;
-            $('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "&serial_number=" + serial_number + "</p>");
             serial_number_match = hasSerialNumberMatch(serial_number);
-
+            $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + serial_number_match + "</p>");
             if(serial_number_match=="Success"){
                 $('#item').val(serial_number);
                 $('#info').append("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
@@ -62,7 +60,6 @@ $('#scan').click(function(){
 });
 
 function hasSerialNumberMatch(serial_number) {
-    getUser();
     $('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "&serial_number=" + serial_number + "</p>");
     url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
     $.ajax({
