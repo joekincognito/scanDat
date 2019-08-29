@@ -44,17 +44,7 @@ $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     cordova.plugins.barcodeScanner.scan( function (result) {
             var serial_number = result.text;
-            var serial_number_match = false;
-            serial_number_match = hasSerialNumberMatch(serial_number);
-            $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + serial_number_match + "</p>");
-            $('#info').append("<p class='alert alert-success msg'>hasSerialNumberMatch=" + hasSerialNumberMatch(serial_number) + "</p>");
-            if(serial_number_match){
-                $('#item').val(serial_number);
-                $('#info').append("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
-            }else{
-                $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + " Please Try Again</p>");
-            }
-            
+            hasSerialNumberMatch(serial_number);
     }, function (error) { 
         $('#info').append("<p>Scanning failed: " + error + "</p>"); 
     });
@@ -62,7 +52,7 @@ $('#scan').click(function(){
 });
 
 function hasSerialNumberMatch(serial_number) {
-    $('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "&serial_number=" + serial_number + "</p>");
+    //$('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "&serial_number=" + serial_number + "</p>");
     url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
     $.ajax({
             url: url,
@@ -70,8 +60,8 @@ function hasSerialNumberMatch(serial_number) {
             crossDomain: true,
             //username: 'ScanAppFloorPlanAccount',
             //password: 'WordPassIsNotaGoodPassword!',
-            //data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number,
-            data: "customer_number=2501&serial_number=Z9876A12345",
+            data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number,
+            //data: "customer_number=2501&serial_number=Z9876A12345",
             statusCode: {
                 404: function() {
                 alert( "page not found" );
@@ -79,14 +69,14 @@ function hasSerialNumberMatch(serial_number) {
                 } 
             })
             .done(function( returnData ) {
-                $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + returnData + "</p>");
                 if(returnData=="Success"){
-                    $('#info').append("<p class='alert alert-success msg'>returnData = Success</p>");
-                    return true;
+                    $('#item').val(serial_number);
+                    $('#info').append("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
+                }else{
+                    $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + " Please Try Again</p>");
                 }
-                return returnData;
             })
             .fail(function() {
-                return "error";
+                $('#info').append("<p class='alert alert-danger msg'>Something Went Wrong - Please Try Again</p>");
             });
 }
