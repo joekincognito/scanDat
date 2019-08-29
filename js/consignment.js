@@ -43,7 +43,7 @@ $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     cordova.plugins.barcodeScanner.scan( function (result) {
             serial_number = result.text;
-
+            $('#info').append("<p class='alert alert-warning msg'>Serial Number test, Serial Number: " + result.text + "</p>");
             serial_number_match = hasSerialNumberMatch(serial_number);
 
             if(serial_number_match=="Success"){
