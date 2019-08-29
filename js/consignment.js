@@ -1,4 +1,5 @@
 var customer = {};
+var user = {};
 var phone = false;
 
 $(document).ready(function() {
