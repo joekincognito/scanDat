@@ -46,7 +46,7 @@ $('#scan').click(function(){
             serial_number = result.text;
             serial_number_match = hasSerialNumberMatch(serial_number);
             $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + serial_number_match + "</p>");
-            if(serial_number_match=="Success"){
+            if(serial_number_match){
                 $('#item').val(serial_number);
                 $('#info').append("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
             }else{
@@ -80,7 +80,7 @@ function hasSerialNumberMatch(serial_number) {
                 $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + returnData + "</p>");
                 if(returnData=="Success"){
                     $('#info').append("<p class='alert alert-success msg'>returnData = Success</p>");
-                    return "Success";
+                    return true;
                 }
                 return returnData;
             })
