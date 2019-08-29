@@ -32,7 +32,8 @@ function getUser(){
         if(result) {
             result = JSON.parse(result);                  
             role = parseInt(result.role);
-            var user = result;
+            user = result;
+            $('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "</p>");
             //$('.glyphicon-user').after('&nbsp;&nbsp;'+user.first_name+' '+user.last_name);
         }else{
             alert("An Error has occurred");
