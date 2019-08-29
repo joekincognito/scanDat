@@ -78,6 +78,10 @@ function hasSerialNumberMatch(serial_number) {
             })
             .done(function( returnData ) {
                 $('#info').append("<p class='alert alert-success msg'>serial_number_match=" + returnData + "</p>");
+                if(returnData=="Success"){
+                    $('#info').append("<p class='alert alert-success msg'>returnData = Success</p>");
+                    return "Success";
+                }
                 return returnData;
             })
             .fail(function() {
