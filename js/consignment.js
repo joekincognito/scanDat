@@ -60,6 +60,7 @@ $('#scan').click(function(){
 });
 
 function hasSerialNumberMatch(serial_number) {
+    $('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "&serial_number=" + serial_number + "</p>");
     url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
     $.ajax({
             url: url,
