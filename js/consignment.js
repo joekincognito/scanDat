@@ -52,16 +52,14 @@ $('#scan').click(function(){
 });
 
 function hasSerialNumberMatch(serial_number) {
-    //$('#info').append("<p class='alert alert-success msg'>customer_number=" + user.customer_id + "&serial_number=" + serial_number + "</p>");
     url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
     $.ajax({
             url: url,
-            //url: "http://10.1.1.1:10080/apps/BarcodeDemo/php/order.php",
             crossDomain: true,
             //username: 'ScanAppFloorPlanAccount',
             //password: 'WordPassIsNotaGoodPassword!',
-            data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number,
-            //data: "customer_number=2501&serial_number=Z9876A12345",
+            //data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number,
+            data: "customer_number=2501&serial_number=abc123",
             statusCode: {
                 404: function() {
                 alert( "page not found" );
@@ -71,12 +69,12 @@ function hasSerialNumberMatch(serial_number) {
             .done(function( returnData ) {
                 if(returnData=="Success"){
                     $('#item').val(serial_number);
-                    $('#info').append("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
+                    $('#info').html("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
                 }else{
-                    $('#info').append("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + " Please Try Again</p>");
+                    $('#info').html("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + " Please Try Again</p>");
                 }
             })
             .fail(function() {
-                $('#info').append("<p class='alert alert-danger msg'>Something Went Wrong - Please Try Again</p>");
+                $('#info').html("<p class='alert alert-danger msg'>Something Went Wrong - Please Try Again</p>");
             });
 }
