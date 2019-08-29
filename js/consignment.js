@@ -78,5 +78,8 @@ function hasSerialNumberMatch(serial_number) {
             })
             .done(function( returnData ) {
                 return returnData;
+            })
+            .fail(function() {
+                return "error";
             });
 }
