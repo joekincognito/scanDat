@@ -52,14 +52,13 @@ $('#scan').click(function(){
 });
 
 function hasSerialNumberMatch(serial_number) {
-    url= "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php";
     $.ajax({
-            url: url,
+            url: "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php",
             crossDomain: true,
             //username: 'ScanAppFloorPlanAccount',
             //password: 'WordPassIsNotaGoodPassword!',
-            //data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number,
-            data: "customer_number=2501&serial_number=abc123",
+            data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number,
+            //data: "customer_number=2501&serial_number=Z9876A12345",
             statusCode: {
                 404: function() {
                 alert( "page not found" );
@@ -71,7 +70,7 @@ function hasSerialNumberMatch(serial_number) {
                     $('#item').val(serial_number);
                     $('#info').html("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
                 }else{
-                    $('#info').html("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + result.text + " Please Try Again</p>");
+                    $('#info').html("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + serial_number + " Please Try Again</p>");
                 }
             })
             .fail(function() {
