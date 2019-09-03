@@ -69,6 +69,8 @@ function hasSerialNumberMatch(serial_number) {
                 if(returnData=="Success"){
                     $('#item').val(serial_number);
                     $('#info').html("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
+                }else if(returnData){
+                    $('#info').html("<p class='alert alert-danger msg'>Error: " + returnData + " Serial Number Error, Serial Number: " + serial_number + " Please Try Again</p>");
                 }else{
                     $('#info').html("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + serial_number + " Please Try Again</p>");
                 }
