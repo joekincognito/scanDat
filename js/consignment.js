@@ -42,8 +42,10 @@ function getUser(){
 
 $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+    $('#info').html("");
     cordova.plugins.barcodeScanner.scan( function (result) {
             var serial_number = result.text;
+            $('#item').val(serial_number);
             hasSerialNumberMatch(serial_number);
     }, function (error) { 
         $('#info').append("<p>Scanning failed: " + error + "</p>"); 
@@ -67,10 +69,9 @@ function hasSerialNumberMatch(serial_number) {
             })
             .done(function( returnData ) {
                 if(returnData=="Success"){
-                    $('#item').val(serial_number);
                     $('#info').html("<p class='alert alert-success msg'>Scan Successfull: Item Removed From Stock</p>");
                 }else if(returnData){
-                    $('#info').html("<p class='alert alert-danger msg'>Error: " + returnData + " Serial Number Error, Serial Number: " + serial_number + " Please Try Again</p>");
+                    $('#info').html("<p class='alert alert-danger msg'>Error: " + returnData + "</p>");
                 }else{
                     $('#info').html("<p class='alert alert-danger msg'>Serial Number Error, Serial Number: " + serial_number + " Please Try Again</p>");
                 }
