@@ -48,7 +48,7 @@ $('#scan').click(function(){
             $('#item').val(serial_number);
             hasSerialNumberMatch(serial_number);
     }, function (error) { 
-        $('#info').append("<p>Scanning failed: " + error + "</p>"); 
+        $('#info').html("<p>Scanning failed: " + error + "</p>"); 
     });
     
 });
@@ -59,13 +59,28 @@ function hasSerialNumberMatch(serial_number) {
             crossDomain: true,
             //username: 'ScanAppFloorPlanAccount',
             //password: 'WordPassIsNotaGoodPassword!',
-            data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number,
-            //data: "customer_number=2501&serial_number=Z9876A12345",
-            statusCode: {
-                404: function() {
-                alert( "page not found" );
-                    }
-                } 
+            data: "customer_number=" + user.customer_id + "&serial_number=" + serial_number
+            //data: "customer_number=2501&serial_number=Z9876A12345"
+            })
+            .fail(function (jqXHR, exception) {
+                // Our error logic here
+                var msg = '';
+                if (jqXHR.status === 0) {
+                    msg = 'No connection.\n Verify Network.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = 'Time out error.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                }
+                 $('#info').html("<p class='alert alert-danger msg'>Error: " + msg + "</p>");
             })
             .done(function( returnData ) {
                 if(returnData=="Success"){
