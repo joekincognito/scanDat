@@ -40,6 +40,11 @@ function getUser(){
     });
 }
 
+//prevent go button on keyboard from submitting
+$("form").submit(function(e){
+    e.preventDefault();
+});
+
 $('#scan').click(function(){
     //var scanner = cordova.require("cordova/plugin/BarcodeScanner");
     $('#info').html("");
