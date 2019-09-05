@@ -54,6 +54,11 @@ $('#scan').click(function(){
     
 });
 
+$('#go').click(function(){
+    var serial_number = $('#item').val();
+    hasSerialNumberMatch(serial_number);
+});
+
 function hasSerialNumberMatch(serial_number) {
     $.ajax({
             url: "http://50.204.18.115/apps/BarcodeDemo/php/consignment.php",
