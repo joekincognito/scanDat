@@ -47,7 +47,8 @@ $('#scan').click(function(){
             var serial_number = result.text;
             $('#item').val(serial_number);
             hasSerialNumberMatch(serial_number);
-    }, function (error) { 
+    }, function (error) {
+        $('#item').val(serial_number+"-error"); 
         $('#info').html("<p>Scanning failed: " + error + "</p>"); 
     });
     
