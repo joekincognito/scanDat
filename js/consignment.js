@@ -60,8 +60,10 @@ $('#scan').click(function(){
 });
 
 $('#go').click(function(){
-    var serial_number = $('#item').val();
-    hasSerialNumberMatch(serial_number);
+    if ( $('#item').val().length > 0 ) {
+        var serial_number = $('#item').val();
+        hasSerialNumberMatch(serial_number);
+    }
 });
 
 function hasSerialNumberMatch(serial_number) {
