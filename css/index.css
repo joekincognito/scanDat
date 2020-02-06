@@ -29,8 +29,8 @@ thead>.topHead{
 background-color: #F5F3E4;
 }
 html {
-  /*position: relative;
-  min-height: 100%;*/
+  position: relative;
+  min-height: 100%;
 }
 .container .text-muted {
 margin: 10px 0;
