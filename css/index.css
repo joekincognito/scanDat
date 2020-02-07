@@ -88,8 +88,10 @@ color: #A8A8A8;
 }
 
 body { 
-    padding-top: 50px;
-    padding-bottom: 40px;
+    /*padding-top: 50px;
+    padding-bottom: 40px;*/
+    padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
+    padding-top: env(safe-area-inset-top); /* iOS 11.2 */
     background-color: #E9E4E4; 
     font-family: 'Arimo', sans-serif !important;
 }
