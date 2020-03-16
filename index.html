@@ -125,6 +125,7 @@ function login(username,password,remember){
            url: "http://apps.gwberkheimer.com/scan_app.php/auth/app_login",
             //data: "qs=" + result.text,
             data: "username=" + username + "&password=" + password + "&remember=" + remember,
+            data: { username: username, password: password, remember: remember },
             statusCode: {
                 404: function() {
                 alert( "page not found" );
