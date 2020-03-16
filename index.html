@@ -123,8 +123,9 @@ login(username,password,remember);
 function login(username,password,remember){
         $.ajax({
            url: "http://apps.gwberkheimer.com/scan_app.php/auth/app_login",
+            type: "POST",           
             //data: "qs=" + result.text,
-            data: "username=" + username + "&password=" + password + "&remember=" + remember,
+            // data: "username=" + username + "&password=" + password + "&remember=" + remember,
             data: { username: username, password: password, remember: remember },
             statusCode: {
                 404: function() {
