@@ -88,42 +88,5 @@
 <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/home.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
-
-<script>
-  if(isConsignmentCustomer()==true){
-    // $('.navbar-brand').attr('href', 'consignment.html');
-    window.location.href = "consignment.html";
-  }
-  else { 
-    window.location.href = "home.html";
-  }     
-
-
-function isConsignmentCustomer(){
-    return getUserRole() === 6;
-}
-function getUserRole(){
-  $.ajax({
-    url: "http://apps.gwberkheimer.com/scan_app.php/scan_app/get_user",
-    statusCode: {
-        404: function() {
-        alert( "page not found" );
-        }}
-    })
-    .done(function( result ) {
-        if(result)
-        {
-            result = JSON.parse(result);                  
-            role = parseInt(result.role);
-        }
-        else
-        {
-            alert("An Error has occurred");
-        }
-    });
-
-    return role;
-}
-</script>
 </body>
 </html>
