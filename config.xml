@@ -13,6 +13,12 @@
         Joe Kelley
     </author>
 
+    <content src="index.html"></content>
+
+    <access origin="*" />
+
+    <allow-navigation href="https://gwberkheimer.com/*" />
+
     <!-- <plugin name="cordova-plugin-barcodescanner" /> -->
     <!-- <plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner.git" /> -->
     <plugin name="phonegap-plugin-barcodescanner" spec="6.0.6" />
@@ -67,7 +73,4 @@
         <splash src="res/screen/android/screen-xhdpi-portrait.png" density="xhdpi" />
     </platform>
 
-
-
-    <access origin="*" />
 </widget>
