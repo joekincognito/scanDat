@@ -1,0 +1,7 @@
+{
+  "name": scandat",
+  "type": "custom",
+  "integrations": {
+    "cordova": {}
+  }
+}
