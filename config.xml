@@ -56,11 +56,7 @@
         <icon src="res/icon/ios/icon-72@2x.png" width="144" height="144" />
         <icon src="res/icon/ios/icon-76@2x.png" width="152" height="152" />
         <icon src="res/icon/ios/icon-60@3x.png" width="180" height="180" />
-        <splash src="res/screen/ios/screen-iphone-portrait-2x.png"/>
-<!--         <splash src="res/screen/ios/screen-iphone-portrait.png" width="320" height="480" />
-        <splash src="res/screen/ios/screen-iphone-portrait-2x.png" width="640" height="960" />
-        <splash src="res/screen/ios/screen-ipad-portrait.png" width="768" height="1024" />
-        <splash src="res/screen/ios/screen-ipad-landscape.png" width="1024" height="768" />  -->   
+        <splash src="res/screen/ios/screen-iphone-portrait-2x.png"/> 
     </platform>
     <platform name="android">
         <icon src="res/icon/android/icon-36-ldpi.png" density="ldpi" />
