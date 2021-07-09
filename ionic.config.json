@@ -1,5 +1,5 @@
 {
-  "name": scandat",
+  "name": "scandat",
   "type": "custom",
   "integrations": {
     "cordova": {}
